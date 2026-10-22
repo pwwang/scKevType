@@ -1,0 +1,256 @@
+source: 'tissue -> candidate CL ids (paper_plan §4.5), DERIVED by rule, not hand-appended:
+  tissues[T] = scope ∩ (cellmarker(T) ∪ observed(T)). cellmarker(T) is the CL ids
+  CellMarker 2.0 files under the tissue_class whose name is T, Normal rows only, via
+  the resource''s own cellontology_id column (Cell_marker_Human.xlsx sha256 bf52b8cd60df,
+  Cell_marker_Mouse.xlsx sha256 e66bc8e13f02); observed(T) is the CL ids an atlas
+  wired to T by a corpus config carries in cells whose tissue resolves to T, read
+  from the atlases'' own obs columns (configs/seed/v2/atlas_tissue_labels.json sha256
+  1db8d286e320 (real-v1.yaml:dominguez_conde sha256 221dd0d46130, real-v1.yaml:muraro
+  sha256 183673651cfa, real-v1.yaml:siletti sha256 0efc5e1c3d3e, real-v1.yaml:tabula_muris_senis
+  sha256 35765ef90533, real-v1.yaml:tabula_sapiens sha256 9ac3d9391bd6, real-v2.yaml:dominguez_conde
+  sha256 221dd0d46130, real-v2.yaml:hao_cite sha256 e33c8904af0c, real-v2.yaml:muraro
+  sha256 183673651cfa, real-v2.yaml:siletti sha256 0efc5e1c3d3e, real-v2.yaml:tabula_muris_senis
+  sha256 35765ef90533, real-v2.yaml:tabula_sapiens sha256 9ac3d9391bd6)); scope is
+  the corpus label_map (real-v1.yaml sha256 a10d2c9a1581, real-v2.yaml sha256 a865819401bd,
+  smoke.yaml sha256 bba7ad6f4e75); a term the rule places in no tissue is reported,
+  never guessed. Ranked by CellMarker rows, ties by CL id. Tissue classes: blood=Blood;
+  brain=Brain; liver=Liver; lung=Lung; pancreas=Pancreas. Placed 71 of 84 scope ids;
+  no candidate anywhere: CL:0000050, CL:0000113, CL:0000138, CL:0000312, CL:0000362,
+  CL:0000547, CL:0000575, CL:0000842, CL:0000893, CL:0002132, CL:0002320, CL:0002623,
+  CL:1001431.'
+tissues:
+  blood:
+  - CL:0000784
+  - CL:0000623
+  - CL:0000576
+  - CL:0000236
+  - CL:0000084
+  - CL:0000815
+  - CL:0000775
+  - CL:0000895
+  - CL:0000624
+  - CL:0000625
+  - CL:0000235
+  - CL:0000913
+  - CL:0000451
+  - CL:0000787
+  - CL:0000898
+  - CL:0000233
+  - CL:0000788
+  - CL:0000860
+  - CL:0000738
+  - CL:0000763
+  - CL:0000786
+  - CL:0000232
+  - CL:0000798
+  - CL:0000115
+  - CL:0000134
+  - CL:0000875
+  - CL:0000897
+  - CL:0000907
+  - CL:0002038
+  - CL:0002393
+  - CL:0000094
+  - CL:0000940
+  - CL:0001054
+  - CL:0000066
+  - CL:0000542
+  - CL:0000169
+  - CL:0000905
+  - CL:0000816
+  - CL:0000909
+  - CL:0000990
+  - CL:0000057
+  - CL:0000900
+  - CL:0000097
+  - CL:0008019
+  - CL:0000540
+  - CL:0000492
+  - CL:0000499
+  - CL:0000988
+  - CL:0000765
+  - CL:0000583
+  - CL:0008001
+  brain:
+  - CL:0000540
+  - CL:0000115
+  - CL:0000235
+  - CL:0000084
+  - CL:0000669
+  - CL:0000192
+  - CL:0000623
+  - CL:0000576
+  - CL:0000624
+  - CL:0000236
+  - CL:0000625
+  - CL:0000763
+  - CL:0000057
+  - CL:0000451
+  - CL:0000066
+  - CL:0000775
+  - CL:0000905
+  - CL:0000815
+  - CL:0008019
+  - CL:0000542
+  - CL:0000232
+  - CL:0000784
+  - CL:0000786
+  - CL:0000145
+  - CL:0000788
+  - CL:0000359
+  - CL:0000134
+  - CL:1001474
+  - CL:0000738
+  - CL:0000898
+  - CL:0000169
+  - CL:0000988
+  - CL:0001054
+  - CL:0000094
+  - CL:0000798
+  - CL:0002326
+  - CL:0000233
+  - CL:0000817
+  - CL:0000940
+  - CL:0000990
+  - CL:0002350
+  liver:
+  - CL:0000115
+  - CL:0000182
+  - CL:0000624
+  - CL:0008019
+  - CL:0000084
+  - CL:0000623
+  - CL:0000235
+  - CL:0000091
+  - CL:0000236
+  - CL:0000576
+  - CL:0000451
+  - CL:0000815
+  - CL:0000775
+  - CL:0000763
+  - CL:0000057
+  - CL:0000134
+  - CL:1000398
+  - CL:0000066
+  - CL:0000186
+  - CL:0000988
+  - CL:0000788
+  - CL:0000898
+  - CL:0002038
+  - CL:0000907
+  - CL:0000784
+  - CL:0000786
+  - CL:0000169
+  - CL:0000625
+  - CL:0008001
+  - CL:0000173
+  - CL:0000798
+  - CL:0000171
+  - CL:0000542
+  - CL:0000738
+  - CL:0000913
+  - CL:0000094
+  - CL:0000359
+  - CL:0000097
+  - CL:0000232
+  - CL:0000765
+  - CL:0000909
+  - CL:0000233
+  - CL:0000499
+  - CL:0000787
+  - CL:0002079
+  - CL:0000492
+  - CL:0000583
+  - CL:0000817
+  - CL:0000860
+  - CL:0000875
+  - CL:0000895
+  - CL:0000900
+  - CL:0000905
+  - CL:0000940
+  - CL:0000990
+  - CL:0002393
+  lung:
+  - CL:0000066
+  - CL:0000057
+  - CL:0000115
+  - CL:0000235
+  - CL:0000646
+  - CL:0000738
+  - CL:0008019
+  - CL:0000763
+  - CL:0000576
+  - CL:0002063
+  - CL:0000669
+  - CL:0000084
+  - CL:0000236
+  - CL:0000192
+  - CL:0000775
+  - CL:0000542
+  - CL:0000625
+  - CL:0000451
+  - CL:0000623
+  - CL:0000097
+  - CL:0000815
+  - CL:0000186
+  - CL:0000499
+  - CL:0000583
+  - CL:0000624
+  - CL:0000134
+  - CL:0000786
+  - CL:0000784
+  - CL:0000094
+  - CL:0000232
+  - CL:0000909
+  - CL:0000990
+  - CL:0002038
+  - CL:0000359
+  - CL:0000895
+  - CL:0000897
+  - CL:0000898
+  - CL:0000798
+  - CL:0000860
+  - CL:0002393
+  - CL:0000765
+  - CL:0000875
+  - CL:0000988
+  - CL:0002543
+  - CL:1000413
+  - CL:0000492
+  - CL:0000787
+  - CL:0000788
+  - CL:0000900
+  - CL:0000905
+  - CL:0000940
+  pancreas:
+  - CL:0000169
+  - CL:0000171
+  - CL:0000084
+  - CL:0000173
+  - CL:0002079
+  - CL:0000066
+  - CL:0002275
+  - CL:0000115
+  - CL:0000235
+  - CL:0000236
+  - CL:0000815
+  - CL:0000057
+  - CL:0008019
+  - CL:0000738
+  - CL:0000451
+  - CL:0000763
+  - CL:0000898
+  - CL:0000576
+  - CL:0000192
+  - CL:0000542
+  - CL:0000540
+  - CL:0000623
+  - CL:0000646
+  - CL:0000787
+  - CL:0000097
+  - CL:0000232
+  - CL:0000786
+  - CL:0000788
+  - CL:0000905
+  - CL:0000988
+version: v2

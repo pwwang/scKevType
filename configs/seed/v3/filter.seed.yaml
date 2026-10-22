@@ -1,0 +1,43 @@
+# Seed: the state-rendering contract (frozen into artifacts/v1/render_config.json).
+#
+# Everything here is a paper claim, so it is data, not code: changing a value
+# produces a new artifact version, and every state rendered afterwards carries a
+# different digest. See docs/contracts.md.
+filter:
+  # Prefix-anchored regexes. MT- drops mitochondrial transcripts, RP[LS]\d the
+  # ribosomal proteins, MTRNR the mitochondrial rRNA-like families, HB[ABD] the
+  # haemoglobins (which swamp whole-blood states).
+  exclude_patterns:
+    - "MT-"
+    - "RP[LS]\\d"
+    - "MTRNR"
+    - "HB[ABD]"
+  # Expressed in essentially every cell: they rank high everywhere and therefore
+  # carry no type information. Supplied as data (not hard-coded) so the list can
+  # be revised without touching the renderer; a revision is a new version.
+  ubiquitous:
+    - ACTB
+    - ACTG1
+    - B2M
+    - EEF1A1
+    - ENO1
+    - FTH1
+    - FTL
+    - GAPDH
+    - HSP90AB1
+    - MALAT1
+    - PPIA
+    - TMSB4X
+    - TPT1
+    - UBC
+  # Training budget: kev's MAX_STATE is 384 tokens, which is ~150-250 symbols.
+  max_genes: 200
+  # "everything after this is below threshold, not absent".
+  delimiter: "| ..."
+
+vocabulary:
+  name: protein_coding_human
+  version: seed-1
+  # Applied only when a tokenizer probe is supplied (the training layer's job);
+  # the contracts build has no tokenizer and admits every symbol.
+  max_tokens: 2

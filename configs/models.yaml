@@ -1,0 +1,15 @@
+# The model registry: which bases a capacity measurement or a run may name.
+#
+# `revision` is the commit a run pins (`--base_revision`). A throughput or VRAM
+# figure without the exact weights it describes is not reproducible, so a model
+# with no pinned revision cannot be measured through `sckevtype.train.compute`
+# (it would silently measure whatever `main` happened to be that day).
+#
+# Only the 0.8B is registered: it is the base Step 3 measures. The 4B is
+# deliberately absent — a 4B measurement is out of scope for this step, and an
+# entry here that nothing measures is a number waiting to be quoted.
+models:
+  0.8b:
+    id: Qwen/Qwen3.5-0.8B-Base
+    revision: dc7cdfe2ee4154fa7e30f5b51ca41bfa40174e68
+    note: the text tower of a multimodal checkpoint (hidden 1024, Gated DeltaNet hybrid)

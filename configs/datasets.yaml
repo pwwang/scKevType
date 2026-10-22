@@ -1,0 +1,179 @@
+# The frozen dataset registry.
+#
+# Every `url`, accession, cell count and licence string below is copied from
+# `research/lit/08-name-datasets.md` (the verified-access-path inventory). Nothing
+# here is invented; where the verified path is a landing page rather than a file,
+# `kind: page` says so and `sckevtype.data.fetch` refuses to guess a file URL.
+#
+#   kind: file        a direct file URL — fetchable
+#   kind: collection  a CELLxGENE collection API URL — fetch resolves the H5AD
+#                     asset whose title contains `selector` (fetch lists the real
+#                     titles if the selector does not match; the title is the one
+#                     thing the inventory did not pin)
+#   kind: page        a landing page — download by hand, then `fetch.stage(...)`
+#
+# `sha256: null` means the bytes have not been pinned yet: the first fetch records
+# the digest it actually saw in a `<file>.sha256` sidecar (`verify_on_fetch: true`)
+# and every fetch after that verifies against it. `default_cap` is a sampling
+# policy, not a fact about the dataset; realised counts land in the corpus manifest.
+# `label_map: null` means the corpus config supplies the map: for CELLxGENE
+# collections the labels are already CL ids and the map only fixes the scope
+# (which terms the corpus admits), while the 10x/CSV sets have free-text or
+# silver-standard labels that need a real table.
+
+version: "v1"
+source: "research/lit/08-name-datasets.md"
+
+datasets:
+  # --- train tier -----------------------------------------------------------
+  - id: pbmc3k
+    tier: train
+    format: tenx_mtx
+    access:
+      - name: pbmc3k
+        url: https://www.10xgenomics.com/datasets/3-k-pbm-cs-from-a-healthy-donor-1-standard-1-1-0
+        kind: page
+    obs: {label: null, donor: null, tissue: null}
+    label_map: label_map.seed_pbmc
+    default_cap: 2700
+    licence: "CC BY 4.0"
+    provenance: "10x Genomics 3k PBMCs from a healthy donor (v1 filtered bundle); quickstart/smoke set"
+    n_cells: 2700
+    tissue: blood
+    silver_standard: "10x ships no author labels; annotations come from a community PBMC silver standard"
+
+  - id: zheng68k
+    tier: train
+    format: tenx_mtx
+    access:
+      - name: zheng68k
+        url: https://www.10xgenomics.com/datasets/fresh-68-k-pbm-cs-donor-a-1-standard-1-1-0
+        kind: page
+    obs: {label: null, donor: null, tissue: null}
+    label_map: label_map.seed_pbmc
+    default_cap: 20000
+    licence: "CC BY 4.0"
+    provenance: "Zheng et al. 2017 PBMC 68k, donor A (10x Genomics); train bulk"
+    n_cells: 68579
+    tissue: blood
+    silver_standard: "10x ships no author labels; annotations come from a community PBMC silver standard"
+
+  - id: hao_cite
+    tier: train
+    format: csv_expr
+    access:
+      - name: hao_cite
+        url: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE164378
+        kind: page
+    obs: {label: null, donor: null, tissue: null}
+    default_cap: 20000
+    licence: "GEO series (raw sequence data dbGaP-controlled)"
+    provenance: >-
+      Hao et al. 2021 CITE-seq PBMC (GSE164378); the cell count is unverified in the
+      inventory, and the raw data is dbGaP-controlled. Only the processed supplementary
+      tables are used; if the CELLxGENE copy is fetched instead, the corpus config
+      overrides `format` to cellxgene_h5ad.
+    tissue: blood
+
+  # --- T2: cross-tissue shift ------------------------------------------------
+  - id: dominguez_conde
+    tier: T2
+    format: cellxgene_h5ad
+    access:
+      - name: global.h5ad
+        url: https://cellgeni.cog.sanger.ac.uk/pan-immune/global.h5ad
+        kind: file
+    obs: {label: cell_type_ontology_term_id, donor: donor_id, tissue: tissue_ontology_term_id}
+    var_genes: feature_name
+    default_cap: 40000
+    licence: "CC BY 4.0"
+    provenance: >-
+      Domínguez Conde et al. pan-immune cell atlas, CELLxGENE collection
+      62ef75e4-cbea-454e-a0ce-998ec40223d3 (direct H5AD on the Sanger CellGeni mirror);
+      multi-tissue, so the corpus config supplies the tissue labels
+    n_cells: 329762
+
+  # --- T3: held-out shifts ---------------------------------------------------
+  - id: muraro
+    tier: T3
+    format: cellxgene_h5ad
+    access:
+      - name: muraro.h5ad
+        url: https://api.cellxgene.cziscience.com/dp/v1/collections/6e8c5415-302c-492a-a5f9-f29c57ff18fb
+        kind: collection
+        selector: Muraro
+    obs: {label: cell_type_ontology_term_id, donor: donor_id, tissue: tissue_ontology_term_id}
+    var_genes: feature_name
+    default_cap: 2126
+    licence: "CC BY 4.0"
+    provenance: "Muraro et al. pancreas, CELLxGENE collection 6e8c5415-302c-492a-a5f9-f29c57ff18fb (CL-mapped)"
+    n_cells: 2126
+    tissue: pancreas
+
+  - id: baron
+    tier: T3
+    format: csv_expr
+    access:
+      - name: baron
+        url: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE84133
+        kind: page
+    obs: {label: assigned_cluster, donor: null, tissue: null}
+    default_cap: 8569
+    licence: "GEO series (freely available)"
+    provenance: >-
+      Baron et al. 2016 human/mouse pancreatic islets (GSE84133), free-text labels
+      (alpha/beta/acinar/ductal/...) mapped to CL by the corpus label map; one file per
+      donor, so `donor_from_stem` keeps the human samples in separate groups
+    n_cells: 8569
+    tissue: pancreas
+
+  - id: tabula_sapiens
+    tier: T3
+    format: cellxgene_h5ad
+    access:
+      - name: tabula_sapiens.h5ad
+        url: https://api.cellxgene.cziscience.com/dp/v1/collections/e5f58829-1a66-40b5-a624-9046778e74f5
+        kind: collection
+        selector: Tabula Sapiens
+    obs: {label: cell_type_ontology_term_id, donor: donor_id, tissue: tissue_ontology_term_id}
+    var_genes: feature_name
+    default_cap: 60000
+    licence: "CC BY 4.0"
+    provenance: "Tabula Sapiens, CELLxGENE collection e5f58829-1a66-40b5-a624-9046778e74f5; multi-tissue"
+    n_cells: 1136218
+
+  - id: tabula_muris_senis
+    tier: T3
+    format: cellxgene_h5ad
+    access:
+      - name: tabula_muris_senis_10x.h5ad
+        url: https://api.cellxgene.cziscience.com/dp/v1/collections/0b9d8a04-bb9d-44da-aa27-705bb65b54eb
+        kind: collection
+        selector: Tabula Muris Senis
+    obs: {label: cell_type_ontology_term_id, donor: donor_id, tissue: tissue_ontology_term_id}
+    var_genes: feature_name
+    default_cap: 30000
+    licence: "MIT / CC BY 4.0"
+    provenance: >-
+      Tabula Muris Senis 10x, CELLxGENE collection 0b9d8a04-bb9d-44da-aa27-705bb65b54eb;
+      cross-species (mouse), multi-tissue
+    n_cells: 245389
+
+  - id: siletti
+    tier: T3
+    format: cellxgene_h5ad
+    access:
+      - name: siletti.h5ad
+        url: https://api.cellxgene.cziscience.com/dp/v1/collections/283d65eb-dd53-496d-adb7-7570c7caa443
+        kind: collection
+        selector: Siletti
+    obs: {label: cell_type_ontology_term_id, donor: donor_id, tissue: tissue_ontology_term_id}
+    var_genes: feature_name
+    default_cap: 50000
+    licence: "CC BY-NC 4.0"
+    provenance: >-
+      Siletti et al. human brain (ABC Atlas mirror is CC BY-NC: non-commercial use only),
+      CELLxGENE collection 283d65eb-dd53-496d-adb7-7570c7caa443; scale stress, not a
+      headline number
+    n_cells: 2480956
+    tissue: brain

@@ -1,0 +1,6 @@
+# Pin line endings across the Windows/WSL split this project is developed on, so a
+# checkout on either side produces the committed bytes and diffs stay readable.
+* text=auto eol=lf
+*.png binary
+*.h5ad binary
+*.safetensors binary

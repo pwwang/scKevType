@@ -1,0 +1,191 @@
+# Seed definition resource: what each candidate type means, as marker lists.
+#
+# SEED, NOT THE REAL THING: hand-written for the contracts build so the format,
+# the digests and the leakage guard can be exercised offline. Step 2 replaces it
+# with the curated resource derived from external sources (see paper_plan §4.3).
+# Definitions must never be derived from the dataset being evaluated — that is
+# what sckevtype.contracts.definitions.assert_no_leakage enforces.
+#
+# render_text() turns each entry into the exact prompt string of a panel option:
+#   "<text>. positive markers: A, B. negative markers: C."
+# so `text` is prose and the marker lists are the evidence.
+source: "seed: hand-curated marker definitions (replace in step 2)"
+version: v1
+synonyms:
+  # marker -> accepted aliases (curated gene synonyms; used by the synonym
+  # perturbation and by nothing else — they never enter the rendered text unless
+  # a perturbation deliberately swaps one in).
+  MS4A1: [CD20]
+  IL7R: [CD127]
+  FCGR3A: [CD16]
+  FCGR3B: [CD16B]
+  NCAM1: [CD56]
+  PECAM1: [CD31]
+  PTPRC: [CD45]
+  ITGAM: [CD11B]
+  ITGAX: [CD11C]
+  CSF1R: [CD115]
+  KLRD1: [CD94]
+definitions:
+  - cl_id: CL:0000084
+    name: T cell
+    text: Lymphocytes of the T lineage, defined by the T-cell receptor complex
+    pos_markers: [CD3D, CD3E, TRAC]
+    neg_markers: [MS4A1, LYZ]
+    provenance: "seed:curated"
+  - cl_id: CL:0000624
+    name: CD4-positive, alpha-beta T cell
+    text: Helper T cells recognising antigen through the alpha-beta T-cell receptor
+    pos_markers: [CD3D, CD3E, CD4, IL7R]
+    neg_markers: [CD8A, CD8B, GNLY, NKG7]
+    provenance: "seed:curated"
+  - cl_id: CL:0000625
+    name: CD8-positive, alpha-beta T cell
+    text: Cytotoxic T cells recognising antigen through the alpha-beta T-cell receptor
+    pos_markers: [CD3D, CD3E, CD8A, CD8B]
+    neg_markers: [CD4, MS4A1]
+    provenance: "seed:curated"
+  - cl_id: CL:0000897
+    name: CD4-positive, alpha-beta memory T cell
+    text: Antigen-experienced helper T cells that persist after the primary response
+    pos_markers: [CD4, IL7R, S100A4, CD44]
+    neg_markers: [CD8A, LEF1, TCF7]
+    provenance: "seed:curated"
+  - cl_id: CL:0000900
+    name: naive thymus-derived CD4-positive, alpha-beta T cell
+    text: Mature helper T cells that have not yet encountered their antigen
+    pos_markers: [CD4, CCR7, SELL, TCF7, LEF1]
+    neg_markers: [CD8A, GZMK, S100A4]
+    provenance: "seed:curated"
+  - cl_id: CL:0000913
+    name: effector memory CD8-positive, alpha-beta T cell
+    text: Cytotoxic memory T cells that circulate and respond without further priming
+    pos_markers: [CD8A, GZMK, GZMA, KLRG1]
+    neg_markers: [CD4, CCR7, SELL]
+    provenance: "seed:curated"
+  - cl_id: CL:0000236
+    name: B cell
+    text: Lymphocytes of the B lineage, defined by the B-cell receptor complex
+    pos_markers: [MS4A1, CD79A, CD79B, CD19]
+    neg_markers: [CD3D, LYZ]
+    provenance: "seed:curated"
+  - cl_id: CL:0000788
+    name: naive B cell
+    text: Mature B cells that have not yet responded to antigen
+    pos_markers: [MS4A1, CD19, IGHD, TCL1A]
+    neg_markers: [CD27, PRDM1]
+    provenance: "seed:curated"
+  - cl_id: CL:0000787
+    name: memory B cell
+    text: Antigen-experienced B cells that persist and respond rapidly on re-exposure
+    pos_markers: [MS4A1, CD27, CD40, TNFRSF13B]
+    neg_markers: [IGHD, TCL1A]
+    provenance: "seed:curated"
+  - cl_id: CL:0000623
+    name: natural killer cell
+    text: Innate cytotoxic lymphocytes that kill without antigen-specific receptors
+    pos_markers: [NKG7, GNLY, KLRD1, KLRF1, KLRC1]
+    neg_markers: [CD3D, MS4A1]
+    provenance: "seed:curated"
+  - cl_id: CL:0000576
+    name: monocyte
+    text: Circulating mononuclear phagocytes of the myeloid lineage
+    pos_markers: [LYZ, CD68, FCN1, S100A8, CST3]
+    neg_markers: [CD3D, MS4A1]
+    provenance: "seed:curated"
+  - cl_id: CL:0000860
+    name: classical monocyte
+    text: The major circulating monocyte population, high in CD14 and inflammatory genes
+    pos_markers: [CD14, LYZ, S100A12, VCAN, FCN1]
+    neg_markers: [FCGR3A, CD3D]
+    provenance: "seed:curated"
+  - cl_id: CL:0000875
+    name: non-classical monocyte
+    text: Patrolling monocytes that lack CD14 and express FCGR3A
+    pos_markers: [FCGR3A, MS4A7, LYZ, CSF1R]
+    neg_markers: [CD14, CD3D]
+    provenance: "seed:curated"
+  - cl_id: CL:0000235
+    name: macrophage
+    text: Tissue-resident phagocytes with scavenger-receptor expression
+    pos_markers: [CD68, CD163, MRC1, MSR1, CSF1R]
+    neg_markers: [CD3D, EPCAM]
+    provenance: "seed:curated"
+  - cl_id: CL:0000451
+    name: dendritic cell
+    text: Antigen-presenting cells of the myeloid lineage that prime T cells
+    pos_markers: [CD1C, FCER1A, CLEC10A, HLA-DRA, CD74]
+    neg_markers: [CD3D, LYZ, CD14]
+    provenance: "seed:curated"
+  - cl_id: CL:0000784
+    name: plasmacytoid dendritic cell
+    text: Dendritic cells specialised for interferon production on viral sensing
+    pos_markers: [LILRA4, IL3RA, IRF7, TLR7]
+    neg_markers: [CD3D, CD14, CD1C]
+    provenance: "seed:curated"
+  - cl_id: CL:0000775
+    name: neutrophil
+    text: Short-lived granulocytes recruited early to inflammation
+    pos_markers: [S100A8, S100A9, CSF3R, FCGR3B]
+    neg_markers: [CD3D, MS4A1, CD14]
+    provenance: "seed:curated"
+  - cl_id: CL:0000097
+    name: mast cell
+    text: Tissue-resident granulocytes carrying tryptases and high-affinity IgE receptors
+    pos_markers: [TPSAB1, TPSB2, CPA3, MS4A2]
+    neg_markers: [CD3D, MS4A1]
+    provenance: "seed:curated"
+  - cl_id: CL:0000232
+    name: erythrocyte
+    text: Oxygen-carrying red blood cells, normally absent from healthy tissue preparations
+    pos_markers: [GYPA, ALAS2, AHSP, SLC4A1]
+    neg_markers: [CD3D, LYZ]
+    provenance: "seed:curated"
+  - cl_id: CL:0000233
+    name: platelet
+    text: Anucleate blood fragments that mediate clotting
+    pos_markers: [PPBP, PF4, ITGA2B, GP9]
+    neg_markers: [CD3D, LYZ]
+    provenance: "seed:curated"
+  - cl_id: CL:0000057
+    name: fibroblast
+    text: Mesenchymal cells producing the interstitial extracellular matrix
+    pos_markers: [COL1A1, COL1A2, DCN, LUM, PDGFRB]
+    neg_markers: [EPCAM, CD3D, PECAM1]
+    provenance: "seed:curated"
+  - cl_id: CL:0000115
+    name: endothelial cell
+    text: Vessel-lining cells forming a barrier between blood and tissue
+    pos_markers: [PECAM1, VWF, CDH5, CLDN5]
+    neg_markers: [EPCAM, COL1A1, CD3D]
+    provenance: "seed:curated"
+  - cl_id: CL:0000359
+    name: vascular associated smooth muscle cell
+    text: Contractile mural cells surrounding vessels
+    pos_markers: [ACTA2, TAGLN, RGS5, PDGFRB]
+    neg_markers: [EPCAM, PECAM1]
+    provenance: "seed:curated"
+  - cl_id: CL:0000066
+    name: epithelial cell
+    text: Cells forming the lining layers of a tissue, joined to their neighbours
+    pos_markers: [EPCAM, KRT8, KRT18, KRT19]
+    neg_markers: [PECAM1, COL1A1, CD3D]
+    provenance: "seed:curated"
+  - cl_id: CL:0000182
+    name: hepatocyte
+    text: The principal parenchymal cells of the liver, specialised for metabolism
+    pos_markers: [ALB, APOA1, TTR, CYP3A4, ASGR1]
+    neg_markers: [CD3D, PECAM1, EPCAM]
+    provenance: "seed:curated"
+  - cl_id: CL:0000542
+    name: lymphocyte
+    text: The common lymphoid lineage, excluding myeloid and stromal cells
+    pos_markers: [PTPRC, IL7R]
+    neg_markers: [LYZ, COL1A1]
+    provenance: "seed:curated"
+  - cl_id: CL:0000763
+    name: myeloid cell
+    text: The common myeloid lineage, excluding lymphoid and stromal cells
+    pos_markers: [LYZ, CSF1R, ITGAM]
+    neg_markers: [CD3D, MS4A1]
+    provenance: "seed:curated"

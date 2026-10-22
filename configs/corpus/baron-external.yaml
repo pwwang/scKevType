@@ -1,0 +1,308 @@
+# The Baron external-validation corpus: a **held-out, cross-lab** suite.
+#
+# Why this corpus exists. Every v4 atlas is trained on *and* tested on its own donors
+# (`configs/corpus/real-v4.yaml`), so a v4 number says "does the model carry to another
+# donor of a lab it has seen", not "does it carry to another lab". This corpus is the
+# second question, asked on an atlas **no arm has ever trained on**: Baron et al. 2016,
+# GEO `GSE84133`, human and mouse pancreatic islets from a different lab, protocol and
+# species mix than `muraro` (the other pancreas atlas). scBERT, scGPT and scTab all use
+# it as their cross-dataset pancreas benchmark, which is why it is the one to report.
+#
+# The population is scored on the **`test`** partition, which is 100% Baron: the atlas
+# is on `tier: T3`, the tier whose every donor goes to test, so all six donors are in
+# the scored population rather than a donor-level quarter of them. That is the whole
+# point of a held-out suite: no donor of the external atlas is trainable here.
+#
+# ## What the archive is, verified rather than restated
+#
+# Probed 2026-10-19 against the bytes, not against the earlier note:
+#
+#   * URL `https://ftp.ncbi.nlm.nih.gov/geo/series/GSE84nnn/GSE84133/suppl/GSE84133_RAW.tar`
+#     answers 200 with `Content-Length: 29122560`, and the downloaded file's sha256 is
+#     `aed2d208d47a36658aa0e63629afe5d4144ef465a8e3d9a0f377422b1f1073dc` — the URL, the
+#     size and the digest the `real-v4.yaml` note recorded. The artifact has not moved.
+#   * it holds **six** `GSM*_umifm_counts.csv.gz` members, and the header is
+#     `,barcode,assigned_cluster,<20125 genes>` (the two mouse files carry 14,878 genes).
+#   * it holds **10,455 cells**, not 8,569: 8,569 is the four *human* donors' subtotal
+#     (1937 + 1724 + 3605 + 1303) and the two mouse donors add 822 + 1064. The earlier
+#     note's "8569 cells" counts the human half; `configs/datasets.yaml#baron` repeats
+#     the same half in `n_cells`. This corpus reads all ten thousand.
+#   * `assigned_cluster` carries **17** distinct values over the six members, not 14:
+#     the 14 the human files carry, plus `B_cell`, `T_cell` and `immune_other`, which
+#     only the mouse files use. `T_cell` is `t_cell`'s capitalised spelling (the mouse
+#     files never write `t_cell`), so the two are one label under two spellings.
+#
+# ## The label map, and what is *not* in it
+#
+# Eleven free-text labels map to nine register terms. Each target was read out of the
+# register's own `artifacts/v2-at-build/definitions.json` (82 in-scope terms) and of the
+# CL snapshot's names, not out of memory:
+#
+#     beta         -> CL:0000169  type B pancreatic cell     (the register's name for the beta cell)
+#     alpha        -> CL:0000171  pancreatic A cell
+#     delta        -> CL:0000173  pancreatic D cell
+#     gamma        -> CL:0002275  pancreatic PP cell         (Baron's "gamma" is the PP cell)
+#     ductal       -> CL:0002079  pancreatic ductal cell
+#     endothelial  -> CL:0000115  endothelial cell
+#     macrophage   -> CL:0000235  macrophage
+#     mast         -> CL:0000097  mast cell
+#     t_cell       -> CL:0000084  T cell                     (2 cells in human1, 4 + 3 in the mice)
+#     T_cell       -> CL:0000084  T cell                     (the mouse files' spelling of the same label)
+#     B_cell       -> CL:0000236  B cell                     (mouse only; the register names it)
+#
+# Note `beta`: the register does **not** call CL:0000171 the beta cell — CL:0000171 is
+# "pancreatic A cell" (alpha) and the beta cell is CL:0000169 "type B pancreatic cell".
+# A map that sent `beta` to CL:0000171 would have every beta cell labelled alpha, and
+# nothing downstream would fail; it would just be a different, wrong benchmark.
+#
+# Six labels are **dropped and counted**, never coerced to a near miss (`qc.json`'s
+# `labels` block, and `counts.per_dataset.baron` in the manifest, carry the counts):
+#
+#     acinar              958 cells   CL:0002064 "pancreatic acinar cell" is not in the register.
+#                                     The register's only acinar term is CL:0002623 "acinar
+#                                     cell of salivary gland" — a different cell type, so
+#                                     mapping to it would invent a label.
+#     activated_stellate  298 cells   CL:0002410 "pancreatic stellate cell" is not in the register
+#     quiescent_stellate  220 cells   (same term; the two labels are one type, two states)
+#     schwann              19 cells   CL:0002573 "Schwann cell" is not in the register
+#     epsilon              18 cells   CL:0005019 "pancreatic epsilon cell" is not in the register
+#                                     (CL:0002274 is "histamine secreting cell", not epsilon)
+#     immune_other          8 cells   not a cell type at all — no CL term to want
+#
+# 8,934 of 10,455 cells (85.45%) are in scope, which is the same order as muraro's
+# 89.18%: the register covers the endocrine and ductal pancreas, and does not cover
+# acinar or the stromal compartment.
+#
+# ## Why `muraro` is here at all (the suite's `train` partition)
+#
+# A kev suite has four partitions and `sckevtype.train.suite` refuses one with an empty
+# `train`/`calibration`/`development` (it measures kev's row and packed limits on the
+# train partition). A corpus of one T3 atlas fills `test` and nothing else, so the
+# suite could not be written. The anchor is therefore a small slice of `muraro` — the
+# pancreas atlas every v4 arm already trained on — on `tier: train`, capped at 200
+# cells: it makes the suite legal, it is **eval-only in practice** (nothing is trained
+# on this suite), and it never reaches `test`. What says so is the corpus manifest's
+# `splits.splits` table — `muraro` in train/calibration/development, `baron` in `test`
+# and nowhere else — plus `counts.per_dataset.baron.cells` against that table. The
+# suite manifest's `trainable_sources` cannot say it: a record's `source` is the
+# *corpus* (`baron-external`), which is what every suite in this repo records.
+#
+# 0.2/0.2 calibration/development (rather than v4's 0.1/0.1) is the fraction that fills
+# all three train-tier partitions from muraro's four donors at this seed — measured,
+# not hoped for: `test_v4_corpus.py`-style check in `tests/data/test_baron_corpus.py`.
+# `test_frac` is inert here: no dataset is on a tier whose draw reaches `test`.
+#
+#     uv run --no-sync python -m sckevtype.data.build \
+#         --config configs/corpus/baron-external.yaml --out artifacts/corpus/baron-external
+#     uv run --no-sync python -m sckevtype.train.suite \
+#         --corpus artifacts/corpus/baron-external --out artifacts/suites/baron-external-eval \
+#         --max_state 6080
+#
+# `--max_state 6080` is pinned on purpose: it is the budget every v2/v3/v4 run carries
+# (`reports/step10b.md`), so a record here fits the context the arms were trained and
+# scored under. Re-measuring it would score the same checkpoint under a different
+# budget, which is not "the same question".
+#
+# `families` is the v4 scoring surface and nothing else: `panel_choice`, `panel_miss`
+# (only where the draw produces one), `marker_noul`, `evidence_diluted`. `out_of_register`
+# and `evidence_removed` are off, and `splits.unregistered` is 0 for both datasets, so
+# the cells the register cannot name are counted as dropped and never become records —
+# this suite asks the three questions the census population is defined on.
+name: baron-external
+# `version` labels the register version the corpus is *reported* against, exactly as in
+# real-v4: `artifacts/v2-at-build` is the frozen register every other corpus was drawn under.
+version: v2
+artifacts: artifacts/v2-at-build
+# The project's corpus seed (real-v2, real-v3, real-v4). Kept: the seed describes the
+# draw, and this corpus's draw is the same kind of draw (a cap and a donor-level split);
+# what makes it a different corpus is the atlas and the tiers, not the seed.
+seed: 20260923
+cache: data/raw
+variant_policy: single
+datasets:
+  # --- the external atlas: every donor scored, none trainable ------------------
+  - id: baron
+    # `registered: false` is a statement about this *wiring*, not about the atlas.
+    # `configs/datasets.yaml#baron` describes a single `csv_expr` table fetched from a
+    # GEO landing page (`kind: page`); this corpus reads a *member* of a tar through a
+    # format the registry does not have, at a cap the registry does not carry. Marking
+    # it `registered: true` would also trip
+    # `tests/data/test_tissue_map_covers_atlas_labels.py`'s staleness guard, whose only
+    # remedy is re-deriving a v2 artifact — out of scope for an eval suite. The licence
+    # the registry records ("GEO series (freely available)") travels in `provenance`.
+    registered: false
+    fetch: false
+    # The archive, verified above. `data/raw` is the repo's dataset root (a symlink to
+    # the data disk on the machines that hold the atlases), so the path is relative.
+    path: data/raw/baron/GSE84133_RAW.tar
+    format: baron_archive
+    # `T3`: every donor of this atlas goes to `test` and nothing else. This is the whole
+    # design — a held-out suite whose scored population is the entire external atlas.
+    tier: T3
+    tissue: pancreas
+    obs: {label: assigned_cluster}
+    # The same column again, for the adapter: tier/format above are the registry's
+    # fields, and `label_column` is the only column this layout names.
+    label_column: assigned_cluster
+    label_map:
+      beta: CL:0000169
+      alpha: CL:0000171
+      delta: CL:0000173
+      gamma: CL:0002275
+      ductal: CL:0002079
+      endothelial: CL:0000115
+      macrophage: CL:0000235
+      mast: CL:0000097
+      t_cell: CL:0000084
+      T_cell: CL:0000084
+      B_cell: CL:0000236
+    # The cap, and why this number. v4 draws 2,000-3,000 cells per atlas (muraro 2,126,
+    # hao_cite 2,000, dominguez_conde 2,000, tabula_muris_senis 2,000, siletti 3,000)
+    # because a v4 test partition is 6,166 cells over six atlases; this suite *is* one
+    # atlas, so it takes the middle of the same band. 2,600 of the 8,934 in-scope cells
+    # is 29%, and the draw is a seeded uniform sample over cell ids, so it is
+    # proportional per donor rather than quota'd: every one of the six donors survives
+    # it with hundreds of cells (realised: human1 503, human2 443, human3 736,
+    # human4 385, mouse1 231, mouse2 302 — the `splits.donors` table is the check).
+    # A per-donor quota would need a `SplitRegistry` change; the property that mattered
+    # (all six donors present) is measured in the manifest, not assumed.
+    cap: 2600
+    provenance: >-
+      Baron et al. 2016, human and mouse pancreatic islets (GEO GSE84133), archive
+      GSE84133_RAW.tar (29,122,560 B, sha256 aed2d208d47a36658aa0e63629afe5d4144ef465a8e3d9a0f377422b1f1073dc);
+      six GSM*_umifm_counts.csv.gz members, donor in the member name (4 human, 2 mouse);
+      GEO series (freely available). Held out: not one of the six v4 atlases.
+
+  # --- the suite-format anchor: the atlas the arms already trained on -----------
+  - id: muraro
+    registered: true
+    fetch: false
+    path: data/raw/muraro/muraro.h5ad
+    format: cellxgene_h5ad
+    tier: train
+    tissue: pancreas
+    obs: {label: cell_type_ontology_term_id, donor: donor_id, tissue: tissue_ontology_term_id}
+    genes_column: feature_name
+    label_map: &scope
+      CL:0000050: CL:0000050
+      CL:0000057: CL:0000057
+      CL:0000066: CL:0000066
+      CL:0000084: CL:0000084
+      CL:0000091: CL:0000091
+      CL:0000094: CL:0000094
+      CL:0000097: CL:0000097
+      CL:0000113: CL:0000113
+      CL:0000115: CL:0000115
+      CL:0000134: CL:0000134
+      CL:0000138: CL:0000138
+      CL:0000145: CL:0000145
+      CL:0000169: CL:0000169
+      CL:0000171: CL:0000171
+      CL:0000173: CL:0000173
+      CL:0000182: CL:0000182
+      CL:0000186: CL:0000186
+      CL:0000192: CL:0000192
+      CL:0000232: CL:0000232
+      CL:0000233: CL:0000233
+      CL:0000235: CL:0000235
+      CL:0000236: CL:0000236
+      CL:0000312: CL:0000312
+      CL:0000359: CL:0000359
+      CL:0000362: CL:0000362
+      CL:0000451: CL:0000451
+      CL:0000492: CL:0000492
+      CL:0000499: CL:0000499
+      CL:0000540: CL:0000540
+      CL:0000542: CL:0000542
+      CL:0000547: CL:0000547
+      CL:0000575: CL:0000575
+      CL:0000576: CL:0000576
+      CL:0000583: CL:0000583
+      CL:0000623: CL:0000623
+      CL:0000624: CL:0000624
+      CL:0000625: CL:0000625
+      CL:0000646: CL:0000646
+      CL:0000669: CL:0000669
+      CL:0000738: CL:0000738
+      CL:0000763: CL:0000763
+      CL:0000765: CL:0000765
+      CL:0000775: CL:0000775
+      CL:0000784: CL:0000784
+      CL:0000786: CL:0000786
+      CL:0000787: CL:0000787
+      CL:0000788: CL:0000788
+      CL:0000798: CL:0000798
+      CL:0000815: CL:0000815
+      CL:0000816: CL:0000816
+      CL:0000817: CL:0000817
+      CL:0000860: CL:0000860
+      CL:0000875: CL:0000875
+      CL:0000893: CL:0000893
+      CL:0000895: CL:0000895
+      CL:0000897: CL:0000897
+      CL:0000898: CL:0000898
+      CL:0000900: CL:0000900
+      CL:0000905: CL:0000905
+      CL:0000907: CL:0000907
+      CL:0000909: CL:0000909
+      CL:0000913: CL:0000913
+      CL:0000940: CL:0000940
+      CL:0000988: CL:0000988
+      CL:0000990: CL:0000990
+      CL:0001054: CL:0001054
+      CL:0002038: CL:0002038
+      CL:0002063: CL:0002063
+      CL:0002079: CL:0002079
+      CL:0002132: CL:0002132
+      CL:0002275: CL:0002275
+      CL:0002326: CL:0002326
+      CL:0002350: CL:0002350
+      CL:0002393: CL:0002393
+      CL:0002543: CL:0002543
+      CL:0002623: CL:0002623
+      CL:0008001: CL:0008001
+      CL:0008019: CL:0008019
+      CL:1000398: CL:1000398
+      CL:1000413: CL:1000413
+      CL:1001431: CL:1001431
+      CL:1001474: CL:1001474
+    # 200 cells: enough for the suite's train partition to be a real partition (and for
+    # kev's row/packed limits to be measured), small enough that nobody mistakes it for
+    # a training set. Its four donors split 0.2/0.2/rest: D28 train, D29 calibration,
+    # D30 development, D31 train.
+    cap: 200
+    provenance: 'configs/datasets.yaml#muraro — Muraro et al. pancreas, CELLxGENE collection 6e8c5415-302c-492a-a5f9-f29c57ff18fb (CL-mapped); the suite-format anchor, never scored'
+
+families: [panel_choice, panel_miss, marker_noul, evidence_diluted]
+
+panel:
+  size_min: 4
+  size_max: 40
+  size_dist: loguniform
+  panel_miss_p: 0.25
+  confusion_frac: 0.5
+  source: random
+  # The v4 rendering, unchanged: the option text carries the prose alone, never the
+  # marker lists (which stay on the option as `markers_pos`/`markers_neg`).
+  option_markers: false
+
+splits:
+  # Read only by the `train` tier (the anchor). 0.2/0.2 is what fills calibration and
+  # development from four donors at this seed; v4's 0.1/0.1 leaves both empty two times
+  # in three, and an empty partition is a suite the builder refuses.
+  calibration_frac: 0.2
+  development_frac: 0.2
+  # Inert: no dataset here is on a tier whose donor draw reaches `test` (baron is `T3`,
+  # muraro is `train`), so the four-way knob is not read.
+  test_frac: 0.2
+  # The cells the register cannot name are counted, not built: no `out_of_register`
+  # family in this suite (see the header), and a 0 budget keeps them out of the donor
+  # draw and the split table so the cell counts mean "cells in scope".
+  unregistered: {baron: 0, muraro: 0}
+
+state:
+  max_tokens: 384
+  tokens_per_symbol: 3.0
+  qc_permutations: 20
+  qc_max_features: 200
+  tokenizer: {id: Qwen/Qwen3.5-0.8B-Base, revision: dc7cdfe2ee4154fa7e30f5b51ca41bfa40174e68}

@@ -1,0 +1,316 @@
+# The v2 corpus: the same atlases as `real-v1.yaml`, read against `artifacts/v2`.
+#
+# What changed from real-v1 (docs/SPEC-step6-register-v2.md):
+#
+# * `version: v2`, so the run reads `artifacts/v2` — the register is no longer the 31-term hand-curated seed but
+#   the 70-term set the >=95% coverage rule derived and CellMarker 2.0 could
+#   ground. On Muraro (pancreas) that is the difference between 0.99% of cells
+#   mapping and 89.18% — between 0 records and a corpus.
+# * Every atlas that carries CL ids maps *every in-scope term to itself*. The map
+#   below is `reports/step6-coverage.json` `in_scope`, written out verbatim by
+#   `scripts/curate_register_v2.py`'s rule — not a second, hand-kept list. A cell
+#   whose label is not a key is dropped and counted, never coerced.
+# * Only `muraro` is listed. The nine-atlas run is the corpus build, which Step 6
+#   §9 puts out of scope; this config exists so the register change is measured
+#   end to end on real bytes now, and grows to the other atlases unchanged.
+name: real-v2
+version: v2
+# Same seed as real-v1: the corpus, not the register, is what a seed describes.
+seed: 20260923
+cache: data/raw
+datasets:
+  # --- T3: held-out shifts ---------------------------------------------------
+  - id: muraro
+    registered: true
+    fetch: true            # registry access is `kind: collection` (CELLxGENE)
+    format: cellxgene_h5ad # registry
+    tier: T3               # registry
+    tissue: pancreas       # registry
+    obs: {label: cell_type_ontology_term_id, donor: donor_id, tissue: tissue_ontology_term_id}   # registry
+    genes_column: feature_name
+    label_map: &scope
+      CL:0000050: CL:0000050
+      CL:0000057: CL:0000057
+      CL:0000066: CL:0000066
+      CL:0000084: CL:0000084
+      CL:0000091: CL:0000091
+      CL:0000094: CL:0000094
+      CL:0000097: CL:0000097
+      CL:0000113: CL:0000113
+      CL:0000115: CL:0000115
+      CL:0000134: CL:0000134
+      CL:0000138: CL:0000138
+      CL:0000145: CL:0000145
+      CL:0000169: CL:0000169
+      CL:0000171: CL:0000171
+      CL:0000173: CL:0000173
+      CL:0000182: CL:0000182
+      CL:0000186: CL:0000186
+      CL:0000192: CL:0000192
+      CL:0000232: CL:0000232
+      CL:0000233: CL:0000233
+      CL:0000235: CL:0000235
+      CL:0000236: CL:0000236
+      CL:0000312: CL:0000312
+      CL:0000359: CL:0000359
+      CL:0000362: CL:0000362
+      CL:0000451: CL:0000451
+      CL:0000492: CL:0000492
+      CL:0000499: CL:0000499
+      CL:0000540: CL:0000540
+      CL:0000542: CL:0000542
+      CL:0000547: CL:0000547
+      CL:0000575: CL:0000575
+      CL:0000576: CL:0000576
+      CL:0000583: CL:0000583
+      CL:0000623: CL:0000623
+      CL:0000624: CL:0000624
+      CL:0000625: CL:0000625
+      CL:0000646: CL:0000646
+      CL:0000669: CL:0000669
+      CL:0000738: CL:0000738
+      CL:0000763: CL:0000763
+      CL:0000765: CL:0000765
+      CL:0000775: CL:0000775
+      CL:0000784: CL:0000784
+      CL:0000786: CL:0000786
+      CL:0000787: CL:0000787
+      CL:0000788: CL:0000788
+      CL:0000798: CL:0000798
+      CL:0000815: CL:0000815
+      CL:0000816: CL:0000816
+      CL:0000817: CL:0000817
+      CL:0000860: CL:0000860
+      CL:0000875: CL:0000875
+      CL:0000893: CL:0000893
+      CL:0000895: CL:0000895
+      CL:0000897: CL:0000897
+      CL:0000898: CL:0000898
+      CL:0000900: CL:0000900
+      CL:0000905: CL:0000905
+      CL:0000907: CL:0000907
+      CL:0000909: CL:0000909
+      CL:0000913: CL:0000913
+      CL:0000940: CL:0000940
+      CL:0000988: CL:0000988
+      CL:0000990: CL:0000990
+      CL:0001054: CL:0001054
+      CL:0002038: CL:0002038
+      CL:0002063: CL:0002063
+      CL:0002079: CL:0002079
+      CL:0002132: CL:0002132
+      CL:0002275: CL:0002275
+      CL:0002326: CL:0002326
+      CL:0002350: CL:0002350
+      CL:0002393: CL:0002393
+      CL:0002543: CL:0002543
+      CL:0002623: CL:0002623
+      CL:0008001: CL:0008001
+      CL:0008019: CL:0008019
+      CL:1000398: CL:1000398
+      CL:1000413: CL:1000413
+      CL:1001431: CL:1001431
+      CL:1001474: CL:1001474
+    cap: 2126              # = n_cells: the whole dataset
+    provenance: "configs/datasets.yaml#muraro — Muraro et al. pancreas, CELLxGENE collection 6e8c5415-302c-492a-a5f9-f29c57ff18fb (CL-mapped)"
+
+  # --- train tier, newly wired in §1 of the Step 7 spec ----------------------
+  # The registry's verified path for this atlas is a GEO accession page
+  # (`kind: page`, GSE164378), so `fetch` refuses to guess — correctly. The corpus
+  # records where it actually downloads from instead, through the same
+  # `kind: collection` path `muraro` uses. The identification is a fact, not an
+  # inference: GSE164378's own series title is "Integrated analysis of multimodal
+  # single-cell data", which is this CELLxGENE collection's name and DOI
+  # (10.1016/j.cell.2021.04.048 — the Hao et al. 2021 paper the registry cites).
+  # Probed 2026-09-23: the collection resolves to one H5AD asset, 2,606,736,974 B.
+  - id: hao_cite
+    registered: true
+    fetch: true
+    access:
+      - name: hao_cite.h5ad
+        url: https://api.cellxgene.cziscience.com/curation/v1/collections/b0cf0afa-ec40-4d65-b570-ed4ceacc6813
+        kind: collection
+        selector: "nygc multimodal pbmc"
+    format: cellxgene_h5ad # the CELLxGENE copy, as the registry's note anticipates
+    tier: train            # registry
+    tissue: blood          # registry
+    obs: {label: cell_type_ontology_term_id, donor: donor_id, tissue: tissue_ontology_term_id}
+    genes_column: feature_name
+    label_map: *scope      # the same in-scope table every CL-carrying atlas uses
+    # The registry's `default_cap` is 20000; the cap here is the machine budget's
+    # (see the cap note below). Its `n_cells` is null ("unverified in the
+    # inventory") and the CELLxGENE asset's own cell count is measured by the load
+    # probe in reports/step7.md, not assumed here.
+    cap: 2000
+    provenance: >-
+      configs/datasets.yaml#hao_cite — Hao et al. 2021 CITE-seq PBMC (GSE164378), read from the
+      CELLxGENE copy of the same study (collection b0cf0afa-ec40-4d65-b570-ed4ceacc6813)
+
+  # --- T2/T3 atlases wired in §2 of the Step 7 spec: same shape as hao_cite,
+  # every value the registry's own (configs/datasets.yaml) — restated, not invented.
+
+  - id: dominguez_conde
+    registered: true
+    fetch: true            # the registry's Sanger mirror is startable (Step 5) but ~24 h
+    path: data/raw/dominguez_conde_cxg/global.h5ad   # §6 switch: read the verified CELLxGENE copy
+                                                     # (3,036,698,635 B, sha256 221dd0d4…); a set `path`
+                                                     # is what `resolve_dataset` reads, so no re-download
+    format: cellxgene_h5ad # registry
+    tier: T2               # registry
+    tissue: null            # registry: multi-tissue, so no single tissue id
+    obs: {label: cell_type_ontology_term_id, donor: donor_id, tissue: tissue_ontology_term_id}
+    genes_column: feature_name
+    # §1: the UBERON ids this atlas pairs with a `tissue` *text* that is one of the
+    # register's own tissue names (measured from the file's obs — 17 distinct
+    # (id, text) pairs; blood 27,620 / lung 35,419 / liver 13,368 cells). Every
+    # other tissue here (spleen, lymph node, bone marrow, jejunum, …) has no list
+    # in the register, so its panels are drawn from the register itself — the
+    # `global` scope `qc.json` reports.
+    tissue_labels: {UBERON:0000178: blood, UBERON:0002048: lung, UBERON:0002107: liver}
+    label_map: *scope
+    cap: 2000               # sampling policy, sized to the machine budget in the cap note below
+    provenance: 'configs/datasets.yaml#dominguez_conde — Domínguez Conde et al. pan-immune cell atlas, CELLxGENE collection 62ef75e4-cbea-454e-a0ce-998ec40223d3 (direct H5AD on the Sanger CellGeni mirror)'
+
+  - id: tabula_muris_senis
+    registered: true
+    fetch: true            # registry access is `kind: collection` (CELLxGENE)
+    format: cellxgene_h5ad # registry
+    tier: T3               # registry
+    tissue: null            # registry: multi-tissue, so no single tissue id
+    obs: {label: cell_type_ontology_term_id, donor: donor_id, tissue: tissue_ontology_term_id}
+    genes_column: feature_name
+    # Measured the same way (16 distinct (id, text) pairs; lung 24,540 / liver
+    # 7,294 / pancreas 6,201 cells).
+    tissue_labels: {UBERON:0002048: lung, UBERON:0002107: liver, UBERON:0001264: pancreas}
+    label_map: *scope
+    cap: 2000               # sampling policy, sized to the machine budget in the cap note below
+    provenance: 'configs/datasets.yaml#tabula_muris_senis — Tabula Muris Senis 10x, CELLxGENE collection 0b9d8a04-bb9d-44da-aa27-705bb65b54eb; cross-species (mouse), multi-tissue'
+
+  - id: siletti
+    registered: true
+    fetch: true            # registry access is `kind: collection` (CELLxGENE)
+    format: cellxgene_h5ad # registry
+    tier: T3               # registry
+    tissue: brain            # registry (human brain: the one single-tissue atlas here)
+    obs: {label: cell_type_ontology_term_id, donor: donor_id, tissue: tissue_ontology_term_id}
+    genes_column: feature_name
+    # No `tissue_labels`: every one of this atlas's 88 tissue values is a brain
+    # *region* (primary motor cortex, hippocampal field, …), none of which is a
+    # register name, so the registry's single `tissue: brain` default is what
+    # resolves them — the `brain` list, which is a register list.
+    cell_column: CellID     # measured: this file has no `_index`, the ids are in `CellID`
+    label_map: *scope
+    cap: 3000               # sampling policy, sized to the machine budget in the cap note below
+    provenance: 'configs/datasets.yaml#siletti — Siletti et al. human brain (ABC Atlas mirror is CC BY-NC: non-commercial use only), CELLxGENE collection 283d65eb-dd53-496d-adb7-7570c7caa443; scale stress, not a headline number'
+
+  - id: tabula_sapiens
+    registered: true
+    fetch: true            # registry access is `kind: collection` (CELLxGENE)
+    format: cellxgene_h5ad # registry
+    tier: T3               # registry
+    tissue: null            # registry: multi-tissue, so no single tissue id
+    obs: {label: cell_type_ontology_term_id, donor: donor_id, tissue: tissue_ontology_term_id}
+    genes_column: feature_name
+    # 75 distinct (id, text) pairs measured; these three are the register's names
+    # (blood 85,233 / lung 65,847 / liver 22,214 cells). `pancreas` is deliberately
+    # *not* here: this atlas calls its pancreas samples "exocrine pancreas" and
+    # "endocrine pancreas", which are not the register's name — guessing the
+    # mapping would be inventing a label, so those cells resolve to `global`.
+    tissue_labels: {UBERON:0000178: blood, UBERON:0002048: lung, UBERON:0002107: liver}
+    label_map: *scope
+    cap: 3000               # sampling policy, sized to the machine budget in the cap note below
+    provenance: 'configs/datasets.yaml#tabula_sapiens — Tabula Sapiens, CELLxGENE collection e5f58829-1a66-40b5-a624-9046778e74f5; multi-tissue'
+
+# --- §6: the dominguez_conde source switch ----------------------------------
+# Wired above as `fetch: true` + a `path:` override. A *build* of it still needs
+# the tissue map's label table (its `tissue` is null in the registry), but the
+# switch is recorded here because it is a fact about the *atlas*, not this run:
+#
+#   * superseded: the registry's `kind: file` Sanger CellGeni mirror
+#     (configs/datasets.yaml#dominguez_conde, access[0] `global.h5ad`). Measured
+#     at ~61 KiB/s for 5.1 GB — about 24 h, and it is the reason this atlas was
+#     never on disk for Step 5.
+#   * used instead: the CELLxGENE copy of the same collection, fetched to
+#     `data/raw/dominguez_conde_cxg/global.h5ad`, 3,036,698,635 B, sha256
+#     221dd0d46130377ab07419c1b3c5cdeb386bd03a8242b403388d1317efde643e
+#     (3.0 GB, ~17 min).
+#   * the corpus reaches it through `fetch: true` as before; only the cache
+#     directory differs, which is why `scripts/curate_register_v2.py` measures
+#     that atlas from the same path (CROSS_SOURCE) rather than a second copy.
+# `configs/datasets.yaml` is not edited: its Sanger entry stays the registry's
+# record of what was verified, and this comment is the corpus's record of what
+# it uses.
+
+# --- §1: the remaining `kind: page` atlases, probed and NOT wired -------------
+# Every URL below was probed with `curl -r 0-2047` on 2026-09-23 and *only* the 206s
+# are recorded (a HEAD carrying the HF Authorization header 400s on a healthy
+# S3-style host, which is how this project lost a day to a false alarm). Sizes are
+# the `Content-Range` totals, not the probe's 2048 bytes.
+#
+#   baron    206 — https://ftp.ncbi.nlm.nih.gov/geo/series/GSE84nnn/GSE84133/suppl/GSE84133_RAW.tar
+#            29,122,560 B, sha256 aed2d208d47a36658aa0e63629afe5d4144ef465a8e3d9a0f377422b1f1073dc.
+#            LABELS ARE INSIDE: the tar holds six `GSM*_umifm_counts.csv.gz` (4 human,
+#            2 mouse); the human header is `,barcode,assigned_cluster,<20125 genes>` and
+#            `assigned_cluster` carries 14 free-text values (human1: beta 872, alpha 236,
+#            delta 214, endothelial 130, ductal 120, acinar 110, quiescent_stellate 92,
+#            gamma 70, activated_stellate 51, macrophage 14, epsilon 13, mast 8, schwann 5,
+#            t_cell 2). NOT WIRED because the bytes the corpus needs are a *member* of an
+#            archive: `fetch` downloads and digest-verifies a stream and has no extraction
+#            step, and `csv_expr` reads one table per dataset while this atlas is six.
+#            8569 cells are behind an unpack the next step can add in one place.
+#   pbmc3k   206 — https://cf.10xgenomics.com/samples/cell-exp/1.1.0/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz
+#            7,621,991 B, sha256 847d6ebd9a1ec9a768f2be7e40ca42cbfe75ebeb6d76a4c24167041699dc28b5
+#            (the registry's `https://www.10xgenomics.com/...` landing page is what 429s;
+#            the CDN behind it serves the file). LABEL-LESS, measured not assumed: the tar
+#            holds exactly `filtered_gene_bc_matrices/hg19/{matrix.mtx,genes.tsv,barcodes.tsv}`
+#            and no annotation file at all — consistent with the registry's `silver_standard`
+#            note. It is also archive-shaped (`tenx_mtx` wants an unpacked directory).
+#   zheng68k NOT PROBE-VERIFIED — the landing page answered HTTP 429 on every attempt
+#            (8 retries with backoff), and the two CDN slugs a probe could form answered
+#            403. No 206, no URL, so no entry: an unverified URL is not an acceptable
+#            outcome, and excluding a second PBMC atlas is (the train tier has pbmc3k
+#            and two other blood atlases).
+#   hao_cite is wired above. All three of the rest are single-tissue or label-less, and
+#   none is on the critical path for the register: the corpus build is §9's job.
+
+panel:
+  size_min: 4
+  size_max: 40
+  size_dist: loguniform
+  panel_miss_p: 0.25
+  confusion_frac: 0.5
+  source: random         # the sampler draws the panel; no user or middleware supplied it
+
+# --- the cap note ------------------------------------------------------------
+# Caps are sampling policy, and the policy here is a machine budget. Measured on
+# this box (2026-09-23, files on /mnt/f through 9p): reading one cell's expression
+# costs ~0.9 ms of h5py row reads but *materialising* a whole `X` costs minutes —
+# dominguez 3.0 GB ≈ 211 s, tabula_muris_senis 3.5 GB ≈ 98 s — and the build read
+# each file twice. `sckevtype.data.adapters` now takes `expression=False` for the
+# registration pass and `only=<kept ids>` for the record pass, so a capped atlas
+# reads only the expression it writes; the caps below (≈24k cells total, ≈6% of
+# the smallest atlas and <1% of the largest) keep a full six-atlas build at a few
+# minutes. Raising them is this file's job and nothing else's — the corpus is
+# reproducible from (seed, config, dataset digest) at any cap.
+splits:
+  calibration_frac: 0.1
+  development_frac: 0.1
+  # A separate budget for the cells the register cannot name: they are a different
+  # population, and one shared cap would let an atlas whose labels are mostly out
+  # of register (siletti: 2.48 M cells over 88 brain regions) crowd out the cells
+  # the register does cover.
+  unregistered: {muraro: 2126, hao_cite: 1000, dominguez_conde: 1500, tabula_muris_senis: 1500, siletti: 2000, tabula_sapiens: 2000}
+
+state:
+  # kev's MAX_STATE, as in real-v1: the budget the corpus is *reported* against. It is
+  # not the budget a run uses — that is measured from the data and recorded in the suite
+  # manifest (sckevtype.train.suite), which for this corpus is ~1,664 tokens.
+  max_tokens: 384
+  tokens_per_symbol: 3.0
+  qc_permutations: 20
+  qc_max_features: 200
+  # The tokenizer `qc.json`'s `tokens` block is measured with, restated from
+  # configs/models.yaml (tests/data/test_real_config.py checks the two agree). Without it
+  # the report carries only the symbol estimate — ~3 tokens per "SYMBOL 12 | " — which is
+  # the heuristic that made a 1,574-token state look like ~600 tokens.
+  tokenizer: {id: Qwen/Qwen3.5-0.8B-Base, revision: dc7cdfe2ee4154fa7e30f5b51ca41bfa40174e68}

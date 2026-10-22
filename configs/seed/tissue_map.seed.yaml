@@ -1,0 +1,61 @@
+# Seed middleware spec: tissue -> candidate CL ids.
+#
+# This is what turns a tissue into the candidate panel a user would be offered
+# (paper_plan §4.5). SEED: hand-written, covering the three tissues the seed
+# definitions span. Changing it changes which types can ever be proposed, and
+# therefore invalidates prior evaluation numbers — that is why it carries a
+# version and a digest, and why step 2's real map is a new artifact version.
+#
+# Every id here must have a definition in definitions.seed.yaml and a term in
+# cl_terms.seed.yaml; the build fails otherwise.
+source: "seed: hand-written tissue->types middleware (replace in step 2)"
+version: v1
+tissues:
+  # Blood: the full immune panel, including the easily-confused lineages
+  # (classical vs non-classical monocytes, cDC vs pDC) the method must separate.
+  blood:
+    - CL:0000624          # CD4 T
+    - CL:0000625          # CD8 T
+    - CL:0000897          # memory CD4 T
+    - CL:0000900          # naive CD4 T
+    - CL:0000913          # effector memory CD8 T
+    - CL:0000236          # B
+    - CL:0000788          # naive B
+    - CL:0000787          # memory B
+    - CL:0000623          # NK
+    - CL:0000860          # classical monocyte
+    - CL:0000875          # non-classical monocyte
+    - CL:0000451          # dendritic cell
+    - CL:0000784          # plasmacytoid dendritic cell
+    - CL:0000775          # neutrophil
+    - CL:0000097          # mast
+    - CL:0000233          # platelet
+    - CL:0000232          # erythrocyte
+  # Lung: immune plus the structural populations a dissociation leaves behind.
+  lung:
+    - CL:0000084          # T
+    - CL:0000624          # CD4 T
+    - CL:0000625          # CD8 T
+    - CL:0000623          # NK
+    - CL:0000236          # B
+    - CL:0000235          # macrophage
+    - CL:0000860          # classical monocyte
+    - CL:0000451          # dendritic cell
+    - CL:0000775          # neutrophil
+    - CL:0000097          # mast
+    - CL:0000066          # epithelial
+    - CL:0000057          # fibroblast
+    - CL:0000115          # endothelial
+    - CL:0000359          # vascular smooth muscle
+  # Liver: dominated by hepatocytes, with the immune infiltrate kept small so a
+  # panel here is a genuinely different composition from blood.
+  liver:
+    - CL:0000182          # hepatocyte
+    - CL:0000066          # epithelial
+    - CL:0000115          # endothelial
+    - CL:0000057          # fibroblast
+    - CL:0000235          # macrophage
+    - CL:0000084          # T
+    - CL:0000623          # NK
+    - CL:0000236          # B
+    - CL:0000576          # monocyte

@@ -1,0 +1,228 @@
+# The real corpus: the nine atlases of `configs/datasets.yaml`, for the paper's benchmark.
+#
+# Grounding rules this file obeys (docs/SPEC-step5-corpus.md §0):
+#
+# * Every dataset below is `registered: true` under the id it has in
+#   `configs/datasets.yaml`, and every field that the registry already states —
+#   `format`, `tier`, `tissue`, `obs`, `var_genes`, `default_cap` — is restated
+#   here only so the corpus is readable in one file. Nothing is invented, and
+#   `tests/data/test_real_config.py` fails if any of them drifts from the
+#   registry, which stays the single source of truth (the registry is read-only).
+# * `tier` uses the registry's vocabulary, where paper_plan §5's "T1" is spelled
+#   `train`: `train` donors feed train/calibration/development, `T2` is the
+#   cross-tissue shift, `T3` the held-out shifts (sckevtype.data.splits).
+# * `label_map` is the *scope*, not a translation, wherever the atlas already
+#   carries CL ids: `cl_id -> cl_id` over the frozen vocabulary of
+#   `artifacts/v1/cl_terms.json` (31 terms — the `&scope` anchor below). A cell
+#   whose label is not a key of the map is dropped and counted under
+#   `labels.<id>.dropped_labels` in the corpus report, never coerced to a
+#   nearby term. The vocabulary is *not* widened here; it is Step 1's, and the
+#   build that uses it waits for the v2 panel vocabulary (spec §3).
+# * `cap` is the registry's `default_cap` for that dataset, restated so the
+#   corpus's per-dataset budget is visible in one place. Its rule
+#   (research/design-notes.md: "cap contribution per dataset *and* per type;
+#   sampling weights rather than truncation") is a *policy*, not a fact about
+#   the atlas: where a cap equals the verified `n_cells` the whole dataset is
+#   admitted, and where it is smaller the cells that survive are the ones the
+#   corpus seed picks — not the first N rows of the file.
+#
+# Fetch status per dataset is a property of the registry's access path, not a
+# choice made here: `fetch: true` means the registry has a retrievable asset
+# (`kind: file` or `kind: collection`), `fetch: false` means its verified path is
+# a landing page (`kind: page`), which `sckevtype.data.fetch` refuses to guess a
+# file URL for — those four are staged by hand (spec §0.1, §2).
+name: real-v1
+version: v1
+# Fixed so every split, panel draw and permutation is reproducible from
+# (seed, config, dataset digest) — AGENT_CONTEXT rule 6. It is a build input,
+# not a fact: any other value describes an equally valid corpus.
+seed: 20260923
+# Fetched datasets land in <repo>/data/raw/<id>/ (git-ignored via `data/`;
+# sckevtype.data.pull.resolve_cache anchors this relative path at the repo root).
+cache: data/raw
+
+datasets:
+  # --- train tier ------------------------------------------------------------
+  - id: pbmc3k
+    registered: true
+    fetch: false           # registry access is `kind: page` (10x dataset page)
+    format: tenx_mtx       # registry
+    tier: train            # registry; paper_plan §5 "Quickstart / smoke"
+    tissue: blood          # registry
+    obs: {label: null, donor: null, tissue: null}   # registry: 10x ships no labels column
+    label_map: label_map.seed_pbmc   # artifacts/v1: the 10-entry silver-standard map
+    cap: 2700              # = n_cells: the whole dataset
+    provenance: "configs/datasets.yaml#pbmc3k — 10x Genomics 3k PBMCs from a healthy donor (v1 filtered bundle); quickstart/smoke set"
+
+  - id: zheng68k
+    registered: true
+    fetch: false           # registry access is `kind: page` (10x dataset page)
+    format: tenx_mtx       # registry
+    tier: train            # registry; paper_plan §5 "Train bulk"
+    tissue: blood          # registry
+    obs: {label: null, donor: null, tissue: null}   # registry: 10x ships no labels column
+    label_map: label_map.seed_pbmc   # same silver standard as pbmc3k (registry, `silver_standard`)
+    cap: 20000             # < n_cells 68579: a ceiling, the seed picks which
+    provenance: "configs/datasets.yaml#zheng68k — Zheng et al. 2017 PBMC 68k, donor A (10x Genomics); train bulk"
+
+  - id: hao_cite
+    registered: true
+    fetch: false           # registry access is `kind: page` (the GEO series page)
+    format: csv_expr       # registry; the registry records that a CELLxGENE copy would be `cellxgene_h5ad`
+    tier: train            # registry; paper_plan §5 "Train bulk"
+    tissue: blood          # registry
+    # The registry leaves `obs` all-null: the processed supplementary tables name
+    # their own label column, which the inventory did not verify.
+    obs: {label: null, donor: null, tissue: null}
+    # No label_map: the registry leaves it null too, and the inventory verifies no
+    # free-text -> CL table for this series. Inventing one here would be a
+    # bespoke vocabulary; the build refuses a dataset with no map rather than
+    # guessing (sckevtype.data.build.Artifacts.label_map).
+    cap: 20000             # registry default_cap; n_cells is unverified (registry)
+    provenance: "configs/datasets.yaml#hao_cite — Hao et al. 2021 CITE-seq PBMC (GSE164378); labelled tables open, raw sequence dbGaP-controlled"
+
+  # --- T2: cross-tissue shift ------------------------------------------------
+  - id: dominguez_conde
+    registered: true
+    fetch: true            # registry access is `kind: file` (Sanger CellGeni mirror)
+    format: cellxgene_h5ad # registry
+    tier: T2               # registry
+    # The registry states no single tissue: the atlas spans the 16 tissues of
+    # paper_plan §5. A cell's tissue comes from `obs.tissue_ontology_term_id`,
+    # which needs a `tissue_labels` UBERON -> canonical table the frozen
+    # `artifacts/v1/tissue_map.json` (blood/liver/lung) cannot yet supply.
+    tissue: null
+    obs: {label: cell_type_ontology_term_id, donor: donor_id, tissue: tissue_ontology_term_id}   # registry
+    genes_column: feature_name   # the registry's `var_genes`; see the header note in reports/step5.md
+    label_map: &scope            # the frozen in-scope vocabulary, every TERM mapped to itself
+      CL:0000057: CL:0000057
+      CL:0000066: CL:0000066
+      CL:0000084: CL:0000084
+      CL:0000097: CL:0000097
+      CL:0000115: CL:0000115
+      CL:0000182: CL:0000182
+      CL:0000192: CL:0000192
+      CL:0000232: CL:0000232
+      CL:0000233: CL:0000233
+      CL:0000235: CL:0000235
+      CL:0000236: CL:0000236
+      CL:0000359: CL:0000359
+      CL:0000451: CL:0000451
+      CL:0000542: CL:0000542
+      CL:0000576: CL:0000576
+      CL:0000623: CL:0000623
+      CL:0000624: CL:0000624
+      CL:0000625: CL:0000625
+      CL:0000763: CL:0000763
+      CL:0000775: CL:0000775
+      CL:0000784: CL:0000784
+      CL:0000787: CL:0000787
+      CL:0000788: CL:0000788
+      CL:0000842: CL:0000842
+      CL:0000860: CL:0000860
+      CL:0000875: CL:0000875
+      CL:0000897: CL:0000897
+      CL:0000900: CL:0000900
+      CL:0000913: CL:0000913
+      CL:0000988: CL:0000988
+      CL:0002320: CL:0002320
+    cap: 40000             # registry default_cap; < n_cells 329762
+    provenance: "configs/datasets.yaml#dominguez_conde — Domínguez Conde et al. pan-immune cell atlas, CELLxGENE collection 62ef75e4-cbea-454e-a0ce-998ec40223d3 (direct H5AD on the Sanger CellGeni mirror)"
+
+  # --- T3: held-out shifts ---------------------------------------------------
+  - id: muraro
+    registered: true
+    fetch: true            # registry access is `kind: collection` (CELLxGENE)
+    format: cellxgene_h5ad # registry
+    tier: T3               # registry
+    tissue: pancreas       # registry
+    obs: {label: cell_type_ontology_term_id, donor: donor_id, tissue: tissue_ontology_term_id}   # registry
+    genes_column: feature_name
+    label_map: *scope
+    cap: 2126              # = n_cells: the whole dataset
+    provenance: "configs/datasets.yaml#muraro — Muraro et al. pancreas, CELLxGENE collection 6e8c5415-302c-492a-a5f9-f29c57ff18fb (CL-mapped)"
+
+  - id: baron
+    registered: true
+    fetch: false           # registry access is `kind: page` (the GEO series page)
+    format: csv_expr       # registry
+    tier: T3               # registry
+    tissue: pancreas       # registry
+    obs: {label: assigned_cluster, donor: null, tissue: null}   # registry
+    donor_from_stem: true  # registry: "one file per donor, so `donor_from_stem` keeps the human samples in separate groups"
+    # No label_map, for a different reason than hao_cite's: the registry says the
+    # labels are author free-text mapped by "the corpus label map", but every
+    # pancreatic CL term research/lit/08 verifies (CL:0000171, CL:0000169,
+    # CL:0000173, CL:0002275, CL:0002064, CL:0002079, CL:0005019, CL:0008024,
+    # CL:0008019) is outside the frozen vocabulary, and the inventory does not
+    # pin the exact strings in `assigned_cluster` at all. A map written from
+    # here would be invented twice over, so the field is left to the v2
+    # vocabulary step — which is also the step that makes this dataset usable.
+    cap: 8569              # registry default_cap; = n_cells (human subset)
+    provenance: "configs/datasets.yaml#baron — Baron et al. 2016 human/mouse pancreatic islets (GSE84133), free-text labels"
+
+  - id: tabula_sapiens
+    registered: true
+    fetch: true            # registry access is `kind: collection` (CELLxGENE)
+    format: cellxgene_h5ad # registry
+    tier: T3               # registry
+    tissue: null           # registry states none: 28 organs (paper_plan §5 "T3 multi-tissue")
+    obs: {label: cell_type_ontology_term_id, donor: donor_id, tissue: tissue_ontology_term_id}   # registry
+    genes_column: feature_name
+    label_map: *scope
+    cap: 60000             # registry default_cap; < n_cells 1136218
+    provenance: "configs/datasets.yaml#tabula_sapiens — Tabula Sapiens, CELLxGENE collection e5f58829-1a66-40b5-a624-9046778e74f5; multi-tissue"
+
+  - id: tabula_muris_senis
+    registered: true
+    fetch: true            # registry access is `kind: collection` (CELLxGENE)
+    format: cellxgene_h5ad # registry
+    tier: T3               # registry
+    tissue: null           # registry states none: 23 organs, mouse (paper_plan §5 "T3 cross-species")
+    obs: {label: cell_type_ontology_term_id, donor: donor_id, tissue: tissue_ontology_term_id}   # registry
+    genes_column: feature_name
+    label_map: *scope
+    cap: 30000             # registry default_cap; < n_cells 245389 (the 10x "All" object)
+    provenance: "configs/datasets.yaml#tabula_muris_senis — Tabula Muris Senis 10x, CELLxGENE collection 0b9d8a04-bb9d-44da-aa27-705bb65b54eb; cross-species (mouse), multi-tissue"
+
+  - id: siletti
+    registered: true
+    fetch: true            # registry access is `kind: collection` (CELLxGENE)
+    format: cellxgene_h5ad # registry
+    tier: T3               # registry
+    tissue: brain          # registry
+    obs: {label: cell_type_ontology_term_id, donor: donor_id, tissue: tissue_ontology_term_id}   # registry
+    genes_column: feature_name
+    label_map: *scope
+    cap: 50000             # registry default_cap; < n_cells 2480956 (paper_plan §5 "Scale stress")
+    provenance: "configs/datasets.yaml#siletti — Siletti et al. human brain (ABC Atlas mirror is CC BY-NC: non-commercial use only), CELLxGENE collection 283d65eb-dd53-496d-adb7-7570c7caa443; scale stress, not a headline number"
+
+# Step 1's defaults (sckevtype.data.panels.PanelConfig), restated rather than
+# left implicit. The panel *vocabulary* — which types a tissue offers — comes
+# from the tissue-map artifact, never from here (CorpusConfig rejects
+# `panel.tissues`); widening it to the tissues above is the v2 step's job.
+panel:
+  size_min: 4
+  size_max: 40
+  size_dist: loguniform
+  panel_miss_p: 0.25
+  confusion_frac: 0.5
+  source: random         # the sampler draws the panel; no user or middleware supplied it
+
+# The train tier is split three ways (sckevtype.data.splits.TIER_SPLITS). The
+# smoke corpus raised these two fractions because its six fixture donors left
+# calibration empty at 0.1; the real train tier has hundreds of donors, so the
+# defaults stand.
+splits:
+  calibration_frac: 0.1
+  development_frac: 0.1
+
+# `max_tokens` is kev's MAX_STATE (kev/PLAN_27b.md: "Kev trains at MAX_STATE =
+# 384 tokens"); `tokens_per_symbol` is the same measured cost of "SYMBOL 12 | "
+# the smoke corpus uses, so the length distribution is comparable across
+# corpora. `qc_max_features` is artifacts/v1/render_config.json's `max_genes`.
+state:
+  max_tokens: 384
+  tokens_per_symbol: 3.0
+  qc_permutations: 20
+  qc_max_features: 200

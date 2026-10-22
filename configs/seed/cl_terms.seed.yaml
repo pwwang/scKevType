@@ -1,0 +1,105 @@
+# Seed Cell Ontology snapshot: the join key of the whole project.
+#
+# SEED, NOT THE REAL THING: this is a hand-curated subset covering the types the
+# seed label map and tissue map use, so the contracts can be built and tested
+# offline. Replace it before any evaluation with the real release:
+#
+#     python -m sckevtype.contracts.fetch --what cl --out configs/seed/cl_terms.seed.yaml
+#
+# The replacement is a new artifact version: CL ids are the join key, so a
+# changed snapshot invalidates prior numbers by construction.
+source: "seed: hand-curated CL subset (replace via sckevtype.contracts.fetch)"
+terms:
+  - cl_id: CL:0000084
+    name: T cell
+    parents: [CL:0000542]
+  - cl_id: CL:0000542
+    name: lymphocyte
+    parents: [CL:0000842]
+  - cl_id: CL:0000624
+    name: CD4-positive, alpha-beta T cell
+    parents: [CL:0000084]
+  - cl_id: CL:0000625
+    name: CD8-positive, alpha-beta T cell
+    parents: [CL:0000084]
+  - cl_id: CL:0000897
+    name: CD4-positive, alpha-beta memory T cell
+    parents: [CL:0000624]
+  - cl_id: CL:0000900
+    name: naive thymus-derived CD4-positive, alpha-beta T cell
+    parents: [CL:0000624]
+  - cl_id: CL:0000913
+    name: effector memory CD8-positive, alpha-beta T cell
+    parents: [CL:0000625]
+  - cl_id: CL:0000236
+    name: B cell
+    parents: [CL:0000542]
+  - cl_id: CL:0000788
+    name: naive B cell
+    parents: [CL:0000236]
+  - cl_id: CL:0000787
+    name: memory B cell
+    parents: [CL:0000236]
+  - cl_id: CL:0000623
+    name: natural killer cell
+    parents: [CL:0000542]
+  - cl_id: CL:0000576
+    name: monocyte
+    parents: [CL:0000763]
+  - cl_id: CL:0000860
+    name: classical monocyte
+    parents: [CL:0000576]
+  - cl_id: CL:0000875
+    name: non-classical monocyte
+    parents: [CL:0000576]
+  - cl_id: CL:0000235
+    name: macrophage
+    parents: [CL:0000763]
+  - cl_id: CL:0000451
+    name: dendritic cell
+    parents: [CL:0000763]
+  - cl_id: CL:0000784
+    name: plasmacytoid dendritic cell
+    parents: [CL:0000451]
+  - cl_id: CL:0000775
+    name: neutrophil
+    parents: [CL:0000763]
+  - cl_id: CL:0000763
+    name: myeloid cell
+    parents: [CL:0000988]
+  - cl_id: CL:0000842
+    name: mononuclear cell
+    parents: [CL:0000988]
+  - cl_id: CL:0000988
+    name: hematopoietic cell
+    parents: []
+  - cl_id: CL:0000097
+    name: mast cell
+    parents: [CL:0000763]
+  - cl_id: CL:0000232
+    name: erythrocyte
+    parents: [CL:0000988]
+  - cl_id: CL:0000233
+    name: platelet
+    parents: [CL:0000988]
+  - cl_id: CL:0000057
+    name: fibroblast
+    parents: [CL:0002320]
+  - cl_id: CL:0002320
+    name: connective tissue cell
+    parents: []
+  - cl_id: CL:0000115
+    name: endothelial cell
+    parents: [CL:0000066]
+  - cl_id: CL:0000359
+    name: vascular associated smooth muscle cell
+    parents: [CL:0000192]
+  - cl_id: CL:0000066
+    name: epithelial cell
+    parents: []
+  - cl_id: CL:0000192
+    name: smooth muscle cell
+    parents: []
+  - cl_id: CL:0000182
+    name: hepatocyte
+    parents: [CL:0000066]

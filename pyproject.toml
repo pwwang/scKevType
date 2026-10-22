@@ -1,0 +1,113 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sckevtype"
+version = "0.1.0"
+description = "Definition-conditioned cell-type annotation with panel-conditional uncertainty and risk-controlled triage"
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+license = "MIT"
+dependencies = [
+    "numpy>=2.1",
+    "pydantic>=2.9",
+    "PyYAML>=6.0",
+    "tqdm>=4.66",
+]
+
+[project.optional-dependencies]
+# Training core — thin adapter over the pinned foundation method (kev).
+train = [
+    "kev",
+    "torch>=2.6,<2.9",
+    "transformers>=5.17,<6",
+    "peft>=0.21",
+    "accelerate>=1.15.0",
+    "datasets>=3.0",
+    "huggingface_hub>=0.34",
+    "safetensors>=0.4",
+]
+# The Laya arm (sckevtype/laya/): a released 322M decision engine, fine-tuned and
+# served through its own package. CPU-only scoring still needs torch.
+laya = [
+    "laya>=0.3.20",
+    "safetensors>=0.4",
+    "torch>=2.6,<2.9",
+    "transformers>=5.17,<6",
+]
+# The standard-annotator baselines (baselines/, scripts/annotation-tools/).
+annotators = [
+    "celltypist>=1.6",
+    "scanpy>=1.10",
+    "scipy>=1.13",
+]
+# Qwen3.5 bases are hybrid (Gated DeltaNet): with FLA the DeltaNet layers use
+# a fused kernel, without it transformers falls back to a correct-but-slow
+# reference implementation.
+# NOTE: do NOT add a triton floor here. kev pins torch>=2.6,<2.9, and those
+# torch versions pin triton exactly (2.6->3.2.0, 2.7->3.3.x, 2.8->3.4.0),
+# while fla-core[cuda] wants triton>=3.7.1 — unsatisfiable together. We install
+# bare `flash-linear-attention` (which needs only fla-core + transformers) and
+# let its kernels run against torch's bundled triton. Outcome of the runtime
+# test is recorded in docs/env-notes.md.
+cuda = [
+    "flash-linear-attention",
+]
+# Dataset adapters (h5ad download + subset). Kept out of base so the
+# contracts layer installs in seconds.
+data = [
+    "anndata>=0.11",
+    "h5py>=3.11",
+    "requests>=2.32",
+]
+# Metrics, baselines, figures.
+eval = [
+    "scikit-learn>=1.5",
+    "pandas>=2.2",
+    "pyarrow>=17",
+    "matplotlib>=3.9",
+]
+serve = [
+    "fastapi>=0.115",
+    "uvicorn>=0.30",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "ruff>=0.7",
+]
+
+[tool.uv.sources]
+# `kev/` is the pinned upstream reference implementation of the decision-model
+# architecture. This deposit does not vendor it: it is third-party code (and its
+# clone carries its own run artefacts), so the dependency is pinned to the exact
+# upstream commit the study used instead. To use a local checkout, replace this
+# line with:  kev = { path = "kev", editable = true }
+kev = { git = "https://github.com/jaredpalmer/kev.git", rev = "2ba81661a7875e13295739a14c73578c1832705a" }
+
+[tool.setuptools.packages.find]
+include = ["sckevtype*"]
+
+[tool.ruff]
+# kev/ is a pinned upstream reference (commit 2ba8166) that this repo reads and never edits, and
+# .scratch/ is scratch: linting them would report someone else's style as this repo's findings and
+# bury the first-party ones. Everything else -- sckevtype/, tests/, scripts/ -- is linted.
+extend-exclude = ["kev", ".scratch"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Two test modules legitimately share the basename `test_import_guard.py`
+# (tests/contracts/ and tests/train/) and neither directory is a package. Under the
+# default "prepend" import mode that is a collection ERROR, which interrupts the whole
+# repo-root run and hides every other test behind it. importlib mode imports by path
+# and is collision-safe.
+addopts = "--import-mode=importlib"
+# The package lives at the repo root; importing it must not depend on the state
+# of the editable install (a CPU-only box may never have run `uv sync --extra`).
+pythonpath = ["."]
+markers = [
+    "slow: needs the train extra and/or a GPU",
+    "network: needs network access",
+]

@@ -1,0 +1,112 @@
+"""The contracts layer: frozen artifacts, one canonical state renderer, digests.
+
+Public surface used by every later layer (data factory, training, uncertainty,
+evaluation, serving). Importing this package must stay free of torch,
+transformers, datasets and anndata — there is a guard test for that, because the
+contracts are the one part of the project that must always be inspectable.
+"""
+
+from . import definitions, freeze, ontology, paths, render, schema, vocab
+from .definitions import (
+    Definition,
+    DefinitionSet,
+    LeakageError,
+    assert_no_leakage,
+    perturb,
+)
+from .freeze import (
+    canonical_json,
+    file_digest,
+    new_version,
+    payload_digest,
+    read_manifest,
+    text_digest,
+    update_manifest,
+    verify_manifest,
+    write_artifact,
+)
+from .ontology import (
+    ClTerm,
+    LabelMap,
+    TissueMap,
+    load_cl_terms,
+    local_type_id,
+    save_cl_terms,
+)
+from .render import (
+    FilterConfig,
+    parse_rank_list,
+    render_digest,
+    render_rank_list,
+    verify_roundtrip,
+)
+from .schema import (
+    MAX_OPTIONS,
+    CellState,
+    ChoiceQuestion,
+    CoverageReport,
+    NoulQuestion,
+    PanelOption,
+    PanelSpec,
+    Record,
+    RecordFamily,
+    RecordMeta,
+    ScoreQuestion,
+    SuiteManifest,
+    panel_id,
+    size_bin,
+)
+from .vocab import VocabConfig, Vocabulary, build_vocabulary, coverage
+
+__all__ = [
+    "MAX_OPTIONS",
+    "CellState",
+    "ChoiceQuestion",
+    "ClTerm",
+    "CoverageReport",
+    "Definition",
+    "DefinitionSet",
+    "FilterConfig",
+    "LabelMap",
+    "LeakageError",
+    "NoulQuestion",
+    "PanelOption",
+    "PanelSpec",
+    "Record",
+    "RecordFamily",
+    "RecordMeta",
+    "ScoreQuestion",
+    "SuiteManifest",
+    "TissueMap",
+    "VocabConfig",
+    "Vocabulary",
+    "assert_no_leakage",
+    "build_vocabulary",
+    "canonical_json",
+    "coverage",
+    "definitions",
+    "file_digest",
+    "freeze",
+    "load_cl_terms",
+    "local_type_id",
+    "new_version",
+    "ontology",
+    "panel_id",
+    "parse_rank_list",
+    "paths",
+    "payload_digest",
+    "perturb",
+    "read_manifest",
+    "render",
+    "render_digest",
+    "render_rank_list",
+    "save_cl_terms",
+    "schema",
+    "size_bin",
+    "text_digest",
+    "update_manifest",
+    "verify_manifest",
+    "verify_roundtrip",
+    "vocab",
+    "write_artifact",
+]

@@ -1,0 +1,48 @@
+# --- Python -----------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+.venv/
+venv*/
+.pytest_cache/
+.ruff_cache/
+
+# --- Secrets ----------------------------------------------------------------
+# The parent working tree keeps OPENROUTER_API_KEY / HUGGINGFACE_TOKEN in .env.
+# Nothing here ever reads a file; the harnesses take keys from the environment.
+.env
+.env.*
+*.key
+*.pem
+
+# --- Data and results: this repository is code only -------------------------
+# Anchored, so sckevtype/data/ and tests/data/ are NOT ignored.
+/data/
+/runs/
+/reports/
+/artifacts/
+/logs/
+/hf-cache/
+/scratch/
+*.jsonl
+*.jsonl.gz
+*.tsv
+*.csv
+*.h5ad
+*.mtx
+*.npy
+*.npz
+*.pkl
+*.pt
+*.safetensors
+*.tgz
+*.tar.gz
+
+# --- Local working files ----------------------------------------------------
+# Editor/agent scratch kept beside the checkout. Never tracked.
+/PRIVATE-NOTES.md
+
+
+# author-facing notes; never commit
+PRIVATE-NOTES.md

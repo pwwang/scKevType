@@ -1,0 +1,71 @@
+# The smoke corpus: the whole factory, end to end, on a fixture small enough to read.
+#
+# Both datasets are SYNTHETIC (`configs/corpus/fixtures/smoke/generate.py`) and are
+# marked `registered: false` under ids that are not in `configs/datasets.yaml`, so
+# nothing produced here can be mistaken for a real atlas. Regenerate with:
+#
+#     uv run python configs/corpus/fixtures/smoke/generate.py
+#
+# The label maps are identities: a CELLxGENE cell already carries a CL id, and the
+# 10x fixture's silver standard is written as CL ids, so the map's job is to say
+# which terms are *in scope*. Anything else ("Doublet", CL:9999999) is dropped and
+# counted in `labels.*` of the report.
+name: smoke
+seed: 20240917
+version: v1
+
+datasets:
+  - id: smoke_h5ad
+    path: configs/corpus/fixtures/smoke/data/cellxgene_lung.h5ad
+    registered: false
+    format: cellxgene_h5ad
+    tier: train
+    tissue: lung
+    obs: {label: cell_type_ontology_term_id, donor: donor_id, tissue: tissue_ontology_term_id}
+    label_map: {CL:0000084: CL:0000084, CL:0000623: CL:0000623, CL:0000235: CL:0000235, CL:0000066: CL:0000066}
+    cap: 20
+    de_markers: [CTSS, SAT1]
+    provenance: synthetic fixture (configs/corpus/fixtures/smoke/generate.py), not a real dataset
+
+  - id: smoke_10x
+    path: configs/corpus/fixtures/smoke/data/tenx_blood
+    registered: false
+    format: tenx_mtx
+    tier: T3
+    tissue: blood
+    # A 10x download is one sample, so the whole bundle is one donor. The fixture's
+    # silver-standard `labels.tsv` stands in for the community annotation that
+    # pbmc3k and Zheng 68k do not ship (research/lit/08).
+    donor_id: smoke_10x_donor
+    label_map: {CL:0000624: CL:0000624, CL:0000623: CL:0000623, CL:0000236: CL:0000236, CL:0000860: CL:0000860, CL:0000233: CL:0000233}
+    cap: 12
+    de_markers: [CTSS, SAT1]
+    provenance: synthetic fixture (configs/corpus/fixtures/smoke/generate.py), not a real dataset
+
+# Small panels: the fixtures have 4-5 types each, so a 4-40 default panel would be
+# drawn from the whole tissue list and would rarely contain the true type.
+panel:
+  size_min: 3
+  size_max: 8
+  panel_miss_p: 0.3
+  confusion_frac: 0.5
+  source: user
+
+axis:
+  name: cytotoxicity
+  up_markers: [GNLY, NKG7]
+  down_markers: [CD3D]
+  thresholds: [1, 2]
+  legend: [low, intermediate, high]
+
+splits:
+  # The train tier is split three ways; with six donors in the fixture, the defaults
+  # (0.1) would send nearly every donor to train and leave calibration empty.
+  calibration_frac: 0.34
+  development_frac: 0.34
+
+state:
+  max_tokens: 384          # kev's MAX_STATE
+  tokens_per_symbol: 3.0   # measured cost of "SYMBOL 12 | "
+  qc_permutations: 20
+  qc_max_features: 200

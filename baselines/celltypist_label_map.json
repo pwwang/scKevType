@@ -1,0 +1,1035 @@
+{
+  "_comment": [
+    "CellTypist label -> CL id, the one hand-made decision a standard-annotator baseline needs.",
+    "basis = how the correspondence is justified:",
+    "  name      the label names this CL term after normalisation (case, plural, punctuation only)",
+    "  synonym   the label is a standard abbreviation / synonym of that CL term's name",
+    "  coarsened the label denotes a subtype the register has no term for; mapped to the CL term it is a",
+    "            subtype of. A coarsened prediction is never counted as an exact hit -- only as",
+    "            hierarchy-consistent (see baselines/step5_score.py).",
+    "Every cl_id below is checked against artifacts/v2/cl_terms.json before it is used; an unknown id is a",
+    "hard error, not a silent skip. A label not listed here and not resolved mechanically is 'unmapped':",
+    "the prediction cannot be expressed in the corpus's label space at all, and is reported as a rate.",
+    "Source for the models' own label strings: baselines/out/celltypist_models.json (dumped from the model files)."
+  ],
+  "models": {
+    "Immune_All_Low.pkl": {
+      "NK cells": {
+        "cl_id": "CL:0000623",
+        "basis": "synonym",
+        "reason": "NK = natural killer"
+      },
+      "CD16+ NK cells": {
+        "cl_id": "CL:0000623",
+        "basis": "coarsened",
+        "reason": "no CD16+ NK term in the register"
+      },
+      "CD16- NK cells": {
+        "cl_id": "CL:0000623",
+        "basis": "coarsened",
+        "reason": "no CD16- NK term in the register"
+      },
+      "Transitional NK": {
+        "cl_id": "CL:0000623",
+        "basis": "coarsened",
+        "reason": "NK developmental stage, not a register term"
+      },
+      "Cycling NK cells": {
+        "cl_id": "CL:0000623",
+        "basis": "coarsened",
+        "reason": "cycling is a state, not a register type"
+      },
+      "Cycling T cells": {
+        "cl_id": "CL:0000084",
+        "basis": "coarsened",
+        "reason": "cycling is a state, not a register type"
+      },
+      "Cycling B cells": {
+        "cl_id": "CL:0000236",
+        "basis": "coarsened",
+        "reason": "cycling is a state, not a register type"
+      },
+      "Cycling DCs": {
+        "cl_id": "CL:0000451",
+        "basis": "coarsened",
+        "reason": "cycling is a state, not a register type"
+      },
+      "Cycling monocytes": {
+        "cl_id": "CL:0000576",
+        "basis": "coarsened",
+        "reason": "cycling is a state, not a register type"
+      },
+      "Cycling gamma-delta T cells": {
+        "cl_id": "CL:0000798",
+        "basis": "coarsened",
+        "reason": "cycling is a state"
+      },
+      "DC": {
+        "cl_id": "CL:0000451",
+        "basis": "synonym",
+        "reason": "DC = dendritic cell"
+      },
+      "pDC": {
+        "cl_id": "CL:0000784",
+        "basis": "synonym",
+        "reason": "pDC = plasmacytoid dendritic cell, a register term"
+      },
+      "MNP": {
+        "cl_id": "CL:0000113",
+        "basis": "synonym",
+        "reason": "MNP = mononuclear phagocyte, a register term"
+      },
+      "Macrophages": {
+        "cl_id": "CL:0000235",
+        "basis": "name",
+        "reason": "'macrophages' singularises to 'macrophage'"
+      },
+      "Intermediate macrophages": {
+        "cl_id": "CL:0000235",
+        "basis": "coarsened",
+        "reason": "no intermediate macrophage term"
+      },
+      "Intestinal macrophages": {
+        "cl_id": "CL:0000235",
+        "basis": "coarsened",
+        "reason": "tissue-resident macrophage subtype"
+      },
+      "Kidney-resident macrophages": {
+        "cl_id": "CL:0000235",
+        "basis": "coarsened",
+        "reason": "tissue-resident macrophage subtype"
+      },
+      "Hofbauer cells": {
+        "cl_id": "CL:0000235",
+        "basis": "coarsened",
+        "reason": "placental macrophage subtype"
+      },
+      "Erythrophagocytic macrophages": {
+        "cl_id": "CL:0000235",
+        "basis": "coarsened",
+        "reason": "functionally defined macrophage subtype"
+      },
+      "Alveolar macrophages": {
+        "cl_id": "CL:0000583",
+        "basis": "name",
+        "reason": "pulmonary alveolar macrophage is a register term"
+      },
+      "Kupffer cells": {
+        "cl_id": "CL:0000091",
+        "basis": "name",
+        "reason": "Kupffer cell is a register term"
+      },
+      "Erythrocytes": {
+        "cl_id": "CL:0000232",
+        "basis": "name",
+        "reason": "'erythrocytes' singularises to 'erythrocyte'"
+      },
+      "Erythroid": {
+        "cl_id": "CL:0000765",
+        "basis": "coarsened",
+        "reason": "erythroid lineage, register term is erythroblast"
+      },
+      "Early erythroid": {
+        "cl_id": "CL:0000765",
+        "basis": "coarsened",
+        "reason": "erythroid lineage"
+      },
+      "Mid erythroid": {
+        "cl_id": "CL:0000765",
+        "basis": "coarsened",
+        "reason": "erythroid lineage"
+      },
+      "Late erythroid": {
+        "cl_id": "CL:0000765",
+        "basis": "coarsened",
+        "reason": "erythroid lineage"
+      },
+      "Megakaryocytes/platelets": {
+        "cl_id": "CL:0000233",
+        "basis": "coarsened",
+        "reason": "label spans both; platelet is the register term"
+      },
+      "Granulocytes": {
+        "cl_id": "CL:0000094",
+        "basis": "name",
+        "reason": "'granulocytes' singularises to 'granulocyte'"
+      },
+      "Neutrophils": {
+        "cl_id": "CL:0000775",
+        "basis": "name",
+        "reason": "'neutrophils' singularises to 'neutrophil'"
+      },
+      "Fibroblasts": {
+        "cl_id": "CL:0000057",
+        "basis": "name",
+        "reason": "'fibroblasts' singularises to 'fibroblast'"
+      },
+      "Plasmablasts": {
+        "cl_id": "CL:0000786",
+        "basis": "coarsened",
+        "reason": "plasmablast is the plasma cell precursor; register has plasma cell"
+      },
+      "Age-associated B cells": {
+        "cl_id": "CL:0000236",
+        "basis": "coarsened",
+        "reason": "B cell subset"
+      },
+      "Follicular B cells": {
+        "cl_id": "CL:0000236",
+        "basis": "coarsened",
+        "reason": "B cell subset"
+      },
+      "Germinal center B cells": {
+        "cl_id": "CL:0000236",
+        "basis": "coarsened",
+        "reason": "B cell subset"
+      },
+      "Proliferative germinal center B cells": {
+        "cl_id": "CL:0000236",
+        "basis": "coarsened",
+        "reason": "B cell subset"
+      },
+      "Transitional B cells": {
+        "cl_id": "CL:0000816",
+        "basis": "coarsened",
+        "reason": "transitional B cell sits under immature B cell in CL"
+      },
+      "Pre-pro-B cells": {
+        "cl_id": "CL:0000817",
+        "basis": "coarsened",
+        "reason": "B precursor"
+      },
+      "Pro-B cells": {
+        "cl_id": "CL:0000817",
+        "basis": "coarsened",
+        "reason": "B precursor"
+      },
+      "Large pre-B cells": {
+        "cl_id": "CL:0000817",
+        "basis": "coarsened",
+        "reason": "B precursor"
+      },
+      "Small pre-B cells": {
+        "cl_id": "CL:0000817",
+        "basis": "coarsened",
+        "reason": "B precursor"
+      },
+      "Memory B cells": {
+        "cl_id": "CL:0000787",
+        "basis": "name",
+        "reason": "memory B cell is a CL term (not in this register, but related by hierarchy)"
+      },
+      "B-cell lineage": {
+        "cl_id": "CL:0000236",
+        "basis": "coarsened",
+        "reason": "lineage label"
+      },
+      "Treg": {
+        "cl_id": "CL:0000815",
+        "basis": "synonym",
+        "reason": "Treg = regulatory T cell"
+      },
+      "Treg(diff)": {
+        "cl_id": "CL:0000815",
+        "basis": "synonym",
+        "reason": "Treg = regulatory T cell"
+      },
+      "CRTAM+ gamma-delta T cells": {
+        "cl_id": "CL:0000798",
+        "basis": "coarsened",
+        "reason": "gamma-delta T cell subset"
+      },
+      "Double-negative thymocytes": {
+        "cl_id": "CL:0000893",
+        "basis": "coarsened",
+        "reason": "thymocyte stage; register term is thymocyte"
+      },
+      "Double-positive thymocytes": {
+        "cl_id": "CL:0000893",
+        "basis": "coarsened",
+        "reason": "thymocyte stage; register term is thymocyte"
+      },
+      "Tcm/Naive helper T cells": {
+        "cl_id": "CL:0000624",
+        "basis": "coarsened",
+        "reason": "CD4 T cell subset"
+      },
+      "Tem/Effector helper T cells": {
+        "cl_id": "CL:0000624",
+        "basis": "coarsened",
+        "reason": "CD4 T cell subset"
+      },
+      "Tem/Effector helper T cells PD1+": {
+        "cl_id": "CL:0000624",
+        "basis": "coarsened",
+        "reason": "CD4 T cell subset"
+      },
+      "Type 1 helper T cells": {
+        "cl_id": "CL:0000624",
+        "basis": "coarsened",
+        "reason": "CD4 T cell subset"
+      },
+      "Type 17 helper T cells": {
+        "cl_id": "CL:0000624",
+        "basis": "coarsened",
+        "reason": "CD4 T cell subset"
+      },
+      "Follicular helper T cells": {
+        "cl_id": "CL:0000624",
+        "basis": "coarsened",
+        "reason": "CD4 T cell subset"
+      },
+      "Memory CD4+ cytotoxic T cells": {
+        "cl_id": "CL:0000624",
+        "basis": "coarsened",
+        "reason": "CD4 T cell subset"
+      },
+      "Tcm/Naive cytotoxic T cells": {
+        "cl_id": "CL:0000625",
+        "basis": "coarsened",
+        "reason": "CD8 T cell subset"
+      },
+      "Tem/Temra cytotoxic T cells": {
+        "cl_id": "CL:0000625",
+        "basis": "coarsened",
+        "reason": "CD8 T cell subset"
+      },
+      "Tem/Trm cytotoxic T cells": {
+        "cl_id": "CL:0000625",
+        "basis": "coarsened",
+        "reason": "CD8 T cell subset"
+      },
+      "Trm cytotoxic T cells": {
+        "cl_id": "CL:0000625",
+        "basis": "coarsened",
+        "reason": "CD8 T cell subset"
+      },
+      "CD8a/a": {
+        "cl_id": "CL:0000625",
+        "basis": "coarsened",
+        "reason": "CD8 T cell subset by chain"
+      },
+      "CD8a/b(entry)": {
+        "cl_id": "CL:0000625",
+        "basis": "coarsened",
+        "reason": "CD8 T cell subset by chain"
+      }
+    },
+    "Immune_All_High.pkl": {
+      "B cells": {
+        "cl_id": "CL:0000236",
+        "basis": "name",
+        "reason": "register term"
+      },
+      "T cells": {
+        "cl_id": "CL:0000084",
+        "basis": "name",
+        "reason": "register term"
+      },
+      "NK cells": {
+        "cl_id": "CL:0000623",
+        "basis": "synonym",
+        "reason": "NK = natural killer"
+      },
+      "DC": {
+        "cl_id": "CL:0000451",
+        "basis": "synonym",
+        "reason": "DC = dendritic cell"
+      },
+      "pDC": {
+        "cl_id": "CL:0000784",
+        "basis": "synonym",
+        "reason": "pDC = plasmacytoid dendritic cell"
+      },
+      "MNP": {
+        "cl_id": "CL:0000113",
+        "basis": "synonym",
+        "reason": "MNP = mononuclear phagocyte"
+      },
+      "Mono-mac": {
+        "cl_id": "CL:0000113",
+        "basis": "coarsened",
+        "reason": "monocyte/macrophage compartment; register term is mononuclear phagocyte"
+      },
+      "Macrophages": {
+        "cl_id": "CL:0000235",
+        "basis": "name",
+        "reason": "register term"
+      },
+      "Monocytes": {
+        "cl_id": "CL:0000576",
+        "basis": "name",
+        "reason": "register term"
+      },
+      "Granulocytes": {
+        "cl_id": "CL:0000094",
+        "basis": "name",
+        "reason": "register term"
+      },
+      "Neutrophils": {
+        "cl_id": "CL:0000775",
+        "basis": "name",
+        "reason": "register term"
+      },
+      "Erythrocytes": {
+        "cl_id": "CL:0000232",
+        "basis": "name",
+        "reason": "register term"
+      },
+      "Erythroid": {
+        "cl_id": "CL:0000765",
+        "basis": "coarsened",
+        "reason": "erythroid lineage"
+      },
+      "Fibroblasts": {
+        "cl_id": "CL:0000057",
+        "basis": "name",
+        "reason": "register term"
+      },
+      "Plasmablasts": {
+        "cl_id": "CL:0000786",
+        "basis": "coarsened",
+        "reason": "plasma cell precursor"
+      },
+      "Megakaryocytes/platelets": {
+        "cl_id": "CL:0000233",
+        "basis": "coarsened",
+        "reason": "label spans both"
+      },
+      "Double-negative thymocytes": {
+        "cl_id": "CL:0000893",
+        "basis": "coarsened",
+        "reason": "thymocyte stage"
+      },
+      "Double-positive thymocytes": {
+        "cl_id": "CL:0000893",
+        "basis": "coarsened",
+        "reason": "thymocyte stage"
+      },
+      "B-cell lineage": {
+        "cl_id": "CL:0000236",
+        "basis": "coarsened",
+        "reason": "lineage label"
+      }
+    },
+    "Human_Lung_Atlas.pkl": {
+      "T cells proliferating": {
+        "cl_id": "CL:0000084",
+        "basis": "coarsened",
+        "reason": "proliferating is a state"
+      },
+      "CD4 T cells": {
+        "cl_id": "CL:0000624",
+        "basis": "synonym",
+        "reason": "CD4 T cell = CD4-positive, alpha-beta T cell at this granularity"
+      },
+      "CD8 T cells": {
+        "cl_id": "CL:0000625",
+        "basis": "synonym",
+        "reason": "CD8 T cell = CD8-positive, alpha-beta T cell at this granularity"
+      },
+      "NK cells": {
+        "cl_id": "CL:0000623",
+        "basis": "synonym",
+        "reason": "NK = natural killer"
+      },
+      "Alveolar macrophages": {
+        "cl_id": "CL:0000583",
+        "basis": "name",
+        "reason": "register term"
+      },
+      "Alveolar Mph CCL3+": {
+        "cl_id": "CL:0000583",
+        "basis": "coarsened",
+        "reason": "alveolar macrophage subset"
+      },
+      "Alveolar Mph MT-positive": {
+        "cl_id": "CL:0000583",
+        "basis": "coarsened",
+        "reason": "alveolar macrophage subset"
+      },
+      "Alveolar Mph proliferating": {
+        "cl_id": "CL:0000583",
+        "basis": "coarsened",
+        "reason": "alveolar macrophage subset"
+      },
+      "Interstitial Mph perivascular": {
+        "cl_id": "CL:0000235",
+        "basis": "coarsened",
+        "reason": "lung interstitial macrophage subset"
+      },
+      "Monocyte-derived Mph": {
+        "cl_id": "CL:0000235",
+        "basis": "coarsened",
+        "reason": "macrophage subset"
+      },
+      "Adventitial fibroblasts": {
+        "cl_id": "CL:0000057",
+        "basis": "coarsened",
+        "reason": "fibroblast subset"
+      },
+      "Alveolar fibroblasts": {
+        "cl_id": "CL:0000057",
+        "basis": "coarsened",
+        "reason": "fibroblast subset"
+      },
+      "Peribronchial fibroblasts": {
+        "cl_id": "CL:0000057",
+        "basis": "coarsened",
+        "reason": "fibroblast subset"
+      },
+      "Subpleural fibroblasts": {
+        "cl_id": "CL:0000057",
+        "basis": "coarsened",
+        "reason": "fibroblast subset"
+      },
+      "Myofibroblasts": {
+        "cl_id": "CL:0000186",
+        "basis": "synonym",
+        "reason": "myofibroblasts = myofibroblast cell"
+      },
+      "Pericytes": {
+        "cl_id": "CL:0000669",
+        "basis": "name",
+        "reason": "register term"
+      },
+      "Smooth muscle": {
+        "cl_id": "CL:0000192",
+        "basis": "name",
+        "reason": "resolves to smooth muscle cell"
+      },
+      "Smooth muscle FAM83D+": {
+        "cl_id": "CL:0000192",
+        "basis": "coarsened",
+        "reason": "smooth muscle subset"
+      },
+      "SM activated stress response": {
+        "cl_id": "CL:0000192",
+        "basis": "coarsened",
+        "reason": "smooth muscle state"
+      },
+      "EC arterial": {
+        "cl_id": "CL:1000413",
+        "basis": "coarsened",
+        "reason": "endothelial cell of artery is a register term"
+      },
+      "EC aerocyte capillary": {
+        "cl_id": "CL:0000115",
+        "basis": "coarsened",
+        "reason": "capillary endothelial subtype"
+      },
+      "EC general capillary": {
+        "cl_id": "CL:0000115",
+        "basis": "coarsened",
+        "reason": "capillary endothelial subtype"
+      },
+      "EC venous pulmonary": {
+        "cl_id": "CL:0000115",
+        "basis": "coarsened",
+        "reason": "venous endothelial subtype"
+      },
+      "EC venous systemic": {
+        "cl_id": "CL:0000115",
+        "basis": "coarsened",
+        "reason": "venous endothelial subtype"
+      },
+      "Lymphatic EC differentiating": {
+        "cl_id": "CL:0000115",
+        "basis": "coarsened",
+        "reason": "endothelial subtype"
+      },
+      "Lymphatic EC mature": {
+        "cl_id": "CL:0000115",
+        "basis": "coarsened",
+        "reason": "endothelial subtype"
+      },
+      "Lymphatic EC proliferating": {
+        "cl_id": "CL:0000115",
+        "basis": "coarsened",
+        "reason": "endothelial subtype"
+      },
+      "Basal resting": {
+        "cl_id": "CL:0000646",
+        "basis": "coarsened",
+        "reason": "basal cell state; register term is basal cell"
+      },
+      "Plasmacytoid DCs": {
+        "cl_id": "CL:0000784",
+        "basis": "synonym",
+        "reason": "plasmacytoid dendritic cell"
+      },
+      "Hematopoietic stem cells": {
+        "cl_id": "CL:0008001",
+        "basis": "coarsened",
+        "reason": "HSC sits under hematopoietic precursor cell in CL"
+      },
+      "AT2": {
+        "cl_id": "CL:0002063",
+        "basis": "synonym",
+        "reason": "AT2 = pulmonary alveolar type 2 cell, a register term"
+      },
+      "AT2 proliferating": {
+        "cl_id": "CL:0002063",
+        "basis": "coarsened",
+        "reason": "AT2 subset"
+      }
+    },
+    "Adult_Mouse_Gut.pkl": {
+      "B cell": {
+        "cl_id": "CL:0000236",
+        "basis": "name",
+        "reason": "register term"
+      },
+      "Naive B cells": {
+        "cl_id": "CL:0000788",
+        "basis": "name",
+        "reason": "register term"
+      },
+      "Plasma cell": {
+        "cl_id": "CL:0000786",
+        "basis": "name",
+        "reason": "register term"
+      },
+      "Mast cell": {
+        "cl_id": "CL:0000097",
+        "basis": "name",
+        "reason": "register term"
+      },
+      "Neutrophil": {
+        "cl_id": "CL:0000775",
+        "basis": "name",
+        "reason": "register term"
+      },
+      "Macrophage": {
+        "cl_id": "CL:0000235",
+        "basis": "name",
+        "reason": "register term"
+      },
+      "Macrophage (M2)": {
+        "cl_id": "CL:0000235",
+        "basis": "coarsened",
+        "reason": "M2 is a polarisation state, not a CL class"
+      },
+      "Cd11c Mac": {
+        "cl_id": "CL:0000235",
+        "basis": "coarsened",
+        "reason": "macrophage subset by marker"
+      },
+      "Cd206 Mac": {
+        "cl_id": "CL:0000235",
+        "basis": "coarsened",
+        "reason": "macrophage subset by marker"
+      },
+      "Fibroblast": {
+        "cl_id": "CL:0000057",
+        "basis": "name",
+        "reason": "register term"
+      },
+      "Endothelial cell": {
+        "cl_id": "CL:0000115",
+        "basis": "name",
+        "reason": "register term"
+      },
+      "EC.Reg4": {
+        "cl_id": "CL:0000115",
+        "basis": "coarsened",
+        "reason": "endothelial subset by marker"
+      },
+      "capillary": {
+        "cl_id": "CL:0000115",
+        "basis": "coarsened",
+        "reason": "capillary endothelial cell"
+      },
+      "capillary 1": {
+        "cl_id": "CL:0000115",
+        "basis": "coarsened",
+        "reason": "capillary endothelial cell"
+      },
+      "capillary 2": {
+        "cl_id": "CL:0000115",
+        "basis": "coarsened",
+        "reason": "capillary endothelial cell"
+      },
+      "capillary Aqp7+": {
+        "cl_id": "CL:0000115",
+        "basis": "coarsened",
+        "reason": "capillary endothelial cell"
+      },
+      "capillary arterial": {
+        "cl_id": "CL:0000115",
+        "basis": "coarsened",
+        "reason": "capillary endothelial cell"
+      },
+      "artery": {
+        "cl_id": "CL:1000413",
+        "basis": "coarsened",
+        "reason": "arterial endothelial cell"
+      },
+      "vein Madcam1+": {
+        "cl_id": "CL:0000115",
+        "basis": "coarsened",
+        "reason": "venous endothelial cell"
+      },
+      "lymphatic": {
+        "cl_id": "CL:0000115",
+        "basis": "coarsened",
+        "reason": "lymphatic endothelial cell"
+      },
+      "Lymphatic endothelial-like cell": {
+        "cl_id": "CL:0000115",
+        "basis": "coarsened",
+        "reason": "endothelial cell"
+      },
+      "Epithelial": {
+        "cl_id": "CL:0000066",
+        "basis": "name",
+        "reason": "resolves to epithelial cell"
+      },
+      "Stromal cell (DN)": {
+        "cl_id": "CL:0000499",
+        "basis": "coarsened",
+        "reason": "stromal cell"
+      },
+      "CD4": {
+        "cl_id": "CL:0000624",
+        "basis": "synonym",
+        "reason": "CD4 T cell"
+      },
+      "Activated CD4+ T cell": {
+        "cl_id": "CL:0000624",
+        "basis": "coarsened",
+        "reason": "CD4 T cell state"
+      },
+      "Resting CD4+ T cells": {
+        "cl_id": "CL:0000624",
+        "basis": "coarsened",
+        "reason": "CD4 T cell state"
+      },
+      "CD8+ T cell": {
+        "cl_id": "CL:0000625",
+        "basis": "synonym",
+        "reason": "CD8 T cell"
+      },
+      "NK cell": {
+        "cl_id": "CL:0000623",
+        "basis": "synonym",
+        "reason": "NK = natural killer"
+      },
+      "pDC": {
+        "cl_id": "CL:0000784",
+        "basis": "synonym",
+        "reason": "pDC = plasmacytoid dendritic cell"
+      },
+      "DC": {
+        "cl_id": "CL:0000451",
+        "basis": "synonym",
+        "reason": "DC = dendritic cell"
+      },
+      "DC (CD103+ CD11+b)": {
+        "cl_id": "CL:0000451",
+        "basis": "coarsened",
+        "reason": "DC subset"
+      },
+      "DC (CD103+ CD11-b)": {
+        "cl_id": "CL:0000451",
+        "basis": "coarsened",
+        "reason": "DC subset"
+      },
+      "DC (CD103- C2)": {
+        "cl_id": "CL:0000451",
+        "basis": "coarsened",
+        "reason": "DC subset"
+      },
+      "Monocytes": {
+        "cl_id": "CL:0000576",
+        "basis": "name",
+        "reason": "register term"
+      },
+      "Inflammatory Monocytes": {
+        "cl_id": "CL:0000576",
+        "basis": "coarsened",
+        "reason": "monocyte subset"
+      },
+      "Ly6c2 Mono": {
+        "cl_id": "CL:0000576",
+        "basis": "coarsened",
+        "reason": "monocyte subset by marker"
+      },
+      "MHCII Mono": {
+        "cl_id": "CL:0000576",
+        "basis": "coarsened",
+        "reason": "monocyte subset by marker"
+      },
+      "Clec4e mono": {
+        "cl_id": "CL:0000576",
+        "basis": "coarsened",
+        "reason": "monocyte subset by marker"
+      },
+      "Basophil": {
+        "cl_id": "CL:0000767",
+        "basis": "name",
+        "reason": "basophil is a CL term"
+      },
+      "Endocrine": {
+        "cl_id": "CL:0000163",
+        "basis": "coarsened",
+        "reason": "endocrine cell, not a register term"
+      }
+    },
+    "Adult_Human_PancreaticIslet.pkl": {
+      "alpha_mature": {
+        "cl_id": "CL:0000171",
+        "basis": "synonym",
+        "reason": "alpha cell = pancreatic A cell, a register term"
+      },
+      "alpha_immature": {
+        "cl_id": "CL:0000171",
+        "basis": "coarsened",
+        "reason": "developmental stage of the A cell"
+      },
+      "alpha_stress II": {
+        "cl_id": "CL:0000171",
+        "basis": "coarsened",
+        "reason": "stress state of the A cell"
+      },
+      "alpha_MHC II": {
+        "cl_id": "CL:0000171",
+        "basis": "coarsened",
+        "reason": "MHC-II-high state of the A cell"
+      },
+      "beta_mature": {
+        "cl_id": "CL:0000169",
+        "basis": "synonym",
+        "reason": "beta cell = type B pancreatic cell, a register term"
+      },
+      "beta_immature": {
+        "cl_id": "CL:0000169",
+        "basis": "coarsened",
+        "reason": "developmental stage of the B cell"
+      },
+      "beta_stress I": {
+        "cl_id": "CL:0000169",
+        "basis": "coarsened",
+        "reason": "stress state of the B cell"
+      },
+      "beta_stress II": {
+        "cl_id": "CL:0000169",
+        "basis": "coarsened",
+        "reason": "stress state of the B cell"
+      },
+      "beta_MHC/autoantigen": {
+        "cl_id": "CL:0000169",
+        "basis": "coarsened",
+        "reason": "antigen-presenting state of the B cell"
+      },
+      "beta_mtDNA deficient": {
+        "cl_id": "CL:0000169",
+        "basis": "coarsened",
+        "reason": "mitochondrial state of the B cell"
+      },
+      "delta": {
+        "cl_id": "CL:0000173",
+        "basis": "synonym",
+        "reason": "delta cell = pancreatic D cell, a register term"
+      },
+      "PP": {
+        "cl_id": "CL:0002275",
+        "basis": "synonym",
+        "reason": "PP = pancreatic polypeptide cell, a register term"
+      }
+    },
+    "Fetal_Human_Pancreas.pkl": {
+      "Duct": {
+        "cl_id": "CL:0002079",
+        "basis": "synonym",
+        "reason": "pancreatic ductal cell, a register term"
+      },
+      "Endothelium": {
+        "cl_id": "CL:0000115",
+        "basis": "synonym",
+        "reason": "Endothelium = endothelial cell"
+      },
+      "Mesenchyme": {
+        "cl_id": "CL:0008019",
+        "basis": "synonym",
+        "reason": "Mesenchyme = mesenchymal cell"
+      },
+      "Immune cell": {
+        "cl_id": "CL:0000738",
+        "basis": "coarsened",
+        "reason": "register has leukocyte and its subtypes, not a generic immune cell"
+      },
+      "PP": {
+        "cl_id": "CL:0002275",
+        "basis": "synonym",
+        "reason": "PP = pancreatic polypeptide cell"
+      },
+      "α": {
+        "cl_id": "CL:0000171",
+        "basis": "synonym",
+        "reason": "alpha cell = pancreatic A cell"
+      },
+      "β": {
+        "cl_id": "CL:0000169",
+        "basis": "synonym",
+        "reason": "beta cell = type B pancreatic cell"
+      },
+      "δ": {
+        "cl_id": "CL:0000173",
+        "basis": "synonym",
+        "reason": "delta cell = pancreatic D cell"
+      },
+      "EP1": {
+        "cl_id": "CL:0000066",
+        "basis": "coarsened",
+        "reason": "pancreatic epithelial progenitor; register term is the parent epithelial cell"
+      },
+      "EP2": {
+        "cl_id": "CL:0000066",
+        "basis": "coarsened",
+        "reason": "pancreatic epithelial progenitor"
+      },
+      "EP3": {
+        "cl_id": "CL:0000066",
+        "basis": "coarsened",
+        "reason": "pancreatic epithelial progenitor"
+      },
+      "EP4": {
+        "cl_id": "CL:0000066",
+        "basis": "coarsened",
+        "reason": "pancreatic epithelial progenitor"
+      }
+    },
+    "Adult_Human_MTG.pkl": {
+      "Endo": {
+        "cl_id": "CL:0000115",
+        "basis": "synonym",
+        "reason": "Endo = endothelial cell"
+      },
+      "Micro-PVM": {
+        "cl_id": "CL:0000113",
+        "basis": "coarsened",
+        "reason": "microglia + perivascular macrophages; both are mononuclear phagocytes"
+      },
+      "VLMC": {
+        "cl_id": "CL:0000057",
+        "basis": "coarsened",
+        "reason": "vascular leptomeningeal cells are fibroblast-lineage; the register has no VLMC term"
+      },
+      "Chandelier": {
+        "cl_id": "CL:0000540",
+        "basis": "coarsened",
+        "reason": "'Chandelier' is a cortical neuron subtype; the register's only neuronal term here is neuron"
+      },
+      "L2/3 IT": {
+        "cl_id": "CL:0000540",
+        "basis": "coarsened",
+        "reason": "'L2/3 IT' is a cortical neuron subtype; the register's only neuronal term here is neuron"
+      },
+      "L4 IT": {
+        "cl_id": "CL:0000540",
+        "basis": "coarsened",
+        "reason": "'L4 IT' is a cortical neuron subtype; the register's only neuronal term here is neuron"
+      },
+      "L5 ET": {
+        "cl_id": "CL:0000540",
+        "basis": "coarsened",
+        "reason": "'L5 ET' is a cortical neuron subtype; the register's only neuronal term here is neuron"
+      },
+      "L5 IT": {
+        "cl_id": "CL:0000540",
+        "basis": "coarsened",
+        "reason": "'L5 IT' is a cortical neuron subtype; the register's only neuronal term here is neuron"
+      },
+      "L5/6 NP": {
+        "cl_id": "CL:0000540",
+        "basis": "coarsened",
+        "reason": "'L5/6 NP' is a cortical neuron subtype; the register's only neuronal term here is neuron"
+      },
+      "L6 CT": {
+        "cl_id": "CL:0000540",
+        "basis": "coarsened",
+        "reason": "'L6 CT' is a cortical neuron subtype; the register's only neuronal term here is neuron"
+      },
+      "L6 IT": {
+        "cl_id": "CL:0000540",
+        "basis": "coarsened",
+        "reason": "'L6 IT' is a cortical neuron subtype; the register's only neuronal term here is neuron"
+      },
+      "L6 IT Car3": {
+        "cl_id": "CL:0000540",
+        "basis": "coarsened",
+        "reason": "'L6 IT Car3' is a cortical neuron subtype; the register's only neuronal term here is neuron"
+      },
+      "L6b": {
+        "cl_id": "CL:0000540",
+        "basis": "coarsened",
+        "reason": "'L6b' is a cortical neuron subtype; the register's only neuronal term here is neuron"
+      },
+      "Lamp5": {
+        "cl_id": "CL:0000540",
+        "basis": "coarsened",
+        "reason": "'Lamp5' is a cortical neuron subtype; the register's only neuronal term here is neuron"
+      },
+      "Lamp5_Lhx6": {
+        "cl_id": "CL:0000540",
+        "basis": "coarsened",
+        "reason": "'Lamp5_Lhx6' is a cortical neuron subtype; the register's only neuronal term here is neuron"
+      },
+      "Pax6": {
+        "cl_id": "CL:0000540",
+        "basis": "coarsened",
+        "reason": "'Pax6' is a cortical neuron subtype; the register's only neuronal term here is neuron"
+      },
+      "Pvalb": {
+        "cl_id": "CL:0000540",
+        "basis": "coarsened",
+        "reason": "'Pvalb' is a cortical neuron subtype; the register's only neuronal term here is neuron"
+      },
+      "Sncg": {
+        "cl_id": "CL:0000540",
+        "basis": "coarsened",
+        "reason": "'Sncg' is a cortical neuron subtype; the register's only neuronal term here is neuron"
+      },
+      "Sst": {
+        "cl_id": "CL:0000540",
+        "basis": "coarsened",
+        "reason": "'Sst' is a cortical neuron subtype; the register's only neuronal term here is neuron"
+      },
+      "Sst Chodl": {
+        "cl_id": "CL:0000540",
+        "basis": "coarsened",
+        "reason": "'Sst Chodl' is a cortical neuron subtype; the register's only neuronal term here is neuron"
+      },
+      "Vip": {
+        "cl_id": "CL:0000540",
+        "basis": "coarsened",
+        "reason": "'Vip' is a cortical neuron subtype; the register's only neuronal term here is neuron"
+      }
+    }
+  },
+  "_model_notes": {
+    "Adult_Human_MTG.pkl": [
+      "'Astro_*' (astrocyte), 'Oligo_*' (oligodendrocyte) and 'OPC_*' (oligodendrocyte precursor) are",
+      "left unmapped: the corpus register contains no astrocyte, oligodendrocyte or OPC term, so a",
+      "prediction of one cannot be expressed in the corpus's label space. In siletti these cells are",
+      "largely in the out_of_register family for the same reason."
+    ],
+    "Fetal_Human_Pancreas.pkl": [
+      "'Acinar cell' is left unmapped on purpose: the register's only acinar term is CL:0002623",
+      "'acinar cell of salivary gland', which is a different cell, so mapping pancreatic acinar to it",
+      "would be a false match. 'Tip', 'Trunk', 'ε' and 'α/PP-Pro' are fetal progenitor / ghrelin-cell",
+      "states with no register term."
+    ],
+    "Mouse_Whole_Brain.pkl": [
+      "Not used as an arm. Its 334 labels are cluster codes of the form '263 CS-RPO Meis2 Gaba' and the",
+      "register contains essentially no mouse brain cell types, so predictions would be almost entirely",
+      "unmapped and the arm would carry no information. Recorded here rather than silently dropped."
+    ],
+    "Cells_Intestinal_Tract.pkl": [
+      "Not used as an arm. 130 of its 134 labels are fine-grained states ('Activated CD4 T',",
+      "'Fetal arterial EC', 'Stromal 1 (ADAMDEC1+)'); mapping them would be a large hand-curation",
+      "exercise for a dataset that already has the immune model and the gut model applied."
+    ]
+  }
+}

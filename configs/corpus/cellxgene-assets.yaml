@@ -1,0 +1,28 @@
+# The one datum `configs/datasets.yaml` could not pin: the CELLxGENE asset title.
+#
+# The registry's own header says so — for `kind: collection` entries, "the title
+# is the one thing the inventory did not pin", and `selector` is a hint whose only
+# documented behaviour on a miss is that fetch *lists the real titles*. Read
+# against the live API on 2026-09-23, three of the five collection entries do not
+# resolve with the registry's hint:
+#
+#   tabula_sapiens      "Tabula Sapiens" matched 35 of 35 assets
+#   tabula_muris_senis  "Tabula Muris Senis" matched 0 of 42 (titles are per-organ)
+#   siletti             "Siletti" matched 0 of 138 (titles are per-dissection)
+#
+# `muraro`'s hint does resolve today (1 asset), and is pinned here anyway so the
+# file answers "which asset does this corpus want" for every collection, and a
+# future revision that adds a second Muraro asset cannot silently make it
+# ambiguous.
+#
+# A `title` below is matched case-insensitively as a substring — the same
+# selection policy `sckevtype.data.fetch.select_asset` applies to a collection.
+version: v1
+source: "https://api.cellxgene.cziscience.com/curation/v1/collections/<collection_id>"
+verified: "2026-09-23"
+
+titles:
+  muraro: "A Single-Cell Transcriptome Atlas of the Human Pancreas"
+  tabula_sapiens: "Tabula Sapiens - All Cells"
+  tabula_muris_senis: "All - A single-cell transcriptomic atlas characterizes ageing tissues in the mouse - 10x"
+  siletti: "All neurons"

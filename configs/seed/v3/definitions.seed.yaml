@@ -1,0 +1,1304 @@
+definitions:
+- cl_id: CL:0000050
+  name: megakaryocyte-erythroid progenitor cell
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD14
+  pos_markers:
+  - CD34
+  - CD38
+  - Ly6a
+  - Abcg4
+  - Add2
+  - CD7
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000050
+  text: A progenitor cell committed to the megakaryocyte and erythroid lineages..
+- cl_id: CL:0000057
+  name: fibroblast
+  neg_markers:
+  - CD4
+  - CD38
+  - CCR7
+  pos_markers:
+  - COL1A1
+  - Col1a1
+  - Pdgfra
+  - DCN
+  - PDGFRA
+  - THY1
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000057
+  text: A connective tissue cell which secretes an extracellular matrix rich in collagen
+    and other macromolecules.
+- cl_id: CL:0000066
+  name: epithelial cell
+  neg_markers:
+  - CD4
+  - CD14
+  - CD38
+  pos_markers:
+  - EPCAM
+  - CDH1
+  - Epcam
+  - KRT19
+  - KRT18
+  - KRT5
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000066
+  text: A cell that is usually found in a two-dimensional sheet with a free surface.
+- cl_id: CL:0000084
+  name: T cell
+  neg_markers:
+  - CD14
+  - KIT
+  - CD24
+  pos_markers:
+  - CD3D
+  - Cd3e
+  - CD8A
+  - CD4
+  - CD3E
+  - CD3G
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000084
+  text: A type of lymphocyte whose defining characteristic is the expression of a
+    T cell receptor complex..
+- cl_id: CL:0000091
+  name: Kupffer cell
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - Clec4f
+  - Adgre1
+  - CD68
+  - Vsig4
+  - C1qa
+  - CD14
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000091
+  text: A tissue-resident macrophage of the reticuloendothelial system found on the
+    luminal surface of the hepatic sinusoids involved in erythrocyte clearance.
+- cl_id: CL:0000094
+  name: granulocyte
+  neg_markers:
+  - CD4
+  - CD34
+  - CD38
+  pos_markers:
+  - FUT4
+  - CEACAM8
+  - S100a8
+  - S100a9
+  - CD33
+  - Camp
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000094
+  text: A leukocyte with abundant granules in the cytoplasm..
+- cl_id: CL:0000097
+  name: mast cell
+  neg_markers:
+  - CD4
+  - CD14
+  - CD38
+  pos_markers:
+  - TPSAB1
+  - KIT
+  - CPA3
+  - TPSB2
+  - MS4A2
+  - HDC
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000097
+  text: A cell that is found in almost all tissues containing numerous basophilic
+    granules and capable of releasing large amounts of histamine and heparin upon
+    activation.
+- cl_id: CL:0000113
+  name: mononuclear phagocyte
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - LYZ
+  - C1qa
+  - CD1C
+  - CD74
+  - CTSB
+  - CTSH
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000113
+  text: A vertebrate phagocyte with a single nucleus..
+- cl_id: CL:0000115
+  name: endothelial cell
+  neg_markers:
+  - CD38
+  - CCR7
+  - CD19
+  pos_markers:
+  - PECAM1
+  - Pecam1
+  - CD34
+  - VWF
+  - Cdh5
+  - CDH5
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000115
+  text: An endothelial cell comprises the outermost layer or lining of anatomical
+    structures and can be squamous or cuboidal.
+- cl_id: CL:0000134
+  name: mesenchymal stem cell
+  neg_markers:
+  - CD38
+  - CCR7
+  - CD8A
+  pos_markers:
+  - THY1
+  - NT5E
+  - CD44
+  - CD34
+  - ITGB1
+  - PTPRC
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000134
+  text: A connective tissue cell that normally gives rise to other cells that are
+    organized as three-dimensional masses.
+- cl_id: CL:0000138
+  name: chondrocyte
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - Col2a1
+  - Sox9
+  - Acan
+  - BIRC5
+  - COL2A1
+  - SOX9
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000138
+  text: A skeletogenic cell that secretes a specialized, avascular, GAG-rich matrix,
+    is embedded in cartilage tissue matrix, retains the ability to divide, and develops
+    from a chondroblast cell..
+- cl_id: CL:0000145
+  name: professional antigen presenting cell
+  neg_markers:
+  - CD4
+  - CD34
+  - CD14
+  pos_markers:
+  - CD80
+  - CD86
+  - HLA-DPB1
+  - HLA-DRA
+  - C1qa
+  - CD40
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000145
+  text: A cell capable of processing and presenting lipid and protein antigens to
+    T cells in order to initiate an immune response..
+- cl_id: CL:0000169
+  name: type B pancreatic cell
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - INS
+  - PDX1
+  - MAFA
+  - NKX6-1
+  - ADCYAP1
+  - DLK1
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000169
+  text: A cell that secretes insulin and is located towards the center of the islets
+    of Langerhans..
+- cl_id: CL:0000171
+  name: pancreatic A cell
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - GCG
+  - Gcg
+  - ARX
+  - Arx
+  - FAP
+  - FEV
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000171
+  text: A type A enteroendocrine cell found in the periphery of the islets of Langerhans
+    that secretes glucagon..
+- cl_id: CL:0000173
+  name: pancreatic D cell
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - SST
+  - Sst
+  - LEPR
+  - RGS2
+  - Rbp4
+  - BCHE
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000173
+  text: A D cell located in the pancreas.
+- cl_id: CL:0000182
+  name: hepatocyte
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - ALB
+  - Alb
+  - AFP
+  - Pck1
+  - TTR
+  - Afp
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000182
+  text: The main structural component of the liver.
+- cl_id: CL:0000186
+  name: myofibroblast cell
+  neg_markers:
+  - CD4
+  - CD34
+  - CD14
+  pos_markers:
+  - ACTA2
+  - Acta2
+  - COL1A1
+  - Col1a1
+  - COL3A1
+  - MYH11
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000186
+  text: An animal cell that has characteristics of both a fibroblast cell and a smooth
+    muscle cell..
+- cl_id: CL:0000192
+  name: smooth muscle cell
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - ACTA2
+  - Acta2
+  - Myh11
+  - Tagln
+  - TAGLN
+  - MYH11
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000192
+  text: A non-striated, elongated, spindle-shaped cell found lining the digestive
+    tract, uterus, and blood vessels.
+- cl_id: CL:0000232
+  name: erythrocyte
+  neg_markers:
+  - CD4
+  - CD14
+  - CD38
+  pos_markers:
+  - HBB
+  - GYPA
+  - HBA1
+  - TFRC
+  - Hba-a1
+  - Alas2
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000232
+  text: A red blood cell.
+- cl_id: CL:0000233
+  name: platelet
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - ITGA2B
+  - PPBP
+  - SELP
+  - GP9
+  - ITGB3
+  - PECAM1
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000233
+  text: A non-nucleated disk-shaped cell formed by extrusion from megakaryocytes,
+    found in the blood of all mammals, and mainly involved in blood coagulation..
+- cl_id: CL:0000235
+  name: macrophage
+  neg_markers:
+  - CD38
+  - PECAM1
+  - CD44
+  pos_markers:
+  - CD68
+  - Adgre1
+  - CD14
+  - CD163
+  - Cd68
+  - Fcgr1
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000235
+  text: A mononuclear phagocyte present in variety of tissues, typically differentiated
+    from monocytes, capable of phagocytosing a variety of extracellular particulate
+    material, including immune complexes, microorganisms, and dead cells..
+- cl_id: CL:0000236
+  name: B cell
+  neg_markers:
+  - CD4
+  - CD44
+  - CD8A
+  pos_markers:
+  - CD19
+  - MS4A1
+  - CD79A
+  - Cd79a
+  - Ptprc
+  - CD27
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000236
+  text: A lymphocyte of B lineage that is capable of B cell mediated immunity..
+- cl_id: CL:0000312
+  name: keratinocyte
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD14
+  pos_markers:
+  - KRT1
+  - KRT5
+  - KRT14
+  - KRT2
+  - ATP1B1
+  - CD34
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000312
+  text: An epithelial cell of stratified squamous tissues, including skin, oral mucosa
+    (Hiroshima et al., 2011), and esophagus (Whelan et al., 2018), that produces keratin
+    proteins and secretes antimicrobial peptides to form a resilient barrier aga.
+- cl_id: CL:0000359
+  name: vascular associated smooth muscle cell
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - Acta2
+  - ACTA2
+  - MYH11
+  - Myh11
+  - TAGLN
+  - Cnn1
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000359
+  text: A smooth muscle cell associated with the vasculature..
+- cl_id: CL:0000362
+  name: epidermal cell
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - FABP5
+  - ITGA6
+  - KRT1
+  - KRT10
+  - KRT14
+  - LEF1
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000362
+  text: An epithelial cell of the integument (the outer layer of an organism)..
+- cl_id: CL:0000451
+  name: dendritic cell
+  neg_markers:
+  - CD38
+  - CD19
+  - PECAM1
+  pos_markers:
+  - CD1C
+  - FCER1A
+  - CD83
+  - Cd209a
+  - CLEC10A
+  - CD86
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000451
+  text: A cell of hematopoietic origin, typically resident in particular tissues,
+    specialized in the uptake, processing, and transport of antigens to lymph nodes
+    for the purpose of stimulating an immune response via T cell activation.
+- cl_id: CL:0000492
+  name: CD4-positive helper T cell
+  neg_markers:
+  - CD34
+  - CD14
+  - CD38
+  pos_markers:
+  - Cd3e
+  - CD4
+  - PTPRC
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000492
+  text: A CD4-positive, alpha-beta T cell that cooperates with other lymphocytes via
+    direct contact or cytokine release to initiate a variety of immune functions..
+- cl_id: CL:0000499
+  name: stromal cell
+  neg_markers:
+  - CD4
+  - CD38
+  - CCR7
+  pos_markers:
+  - THY1
+  - CD34
+  - NT5E
+  - ACTA2
+  - CD44
+  - DCN
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000499
+  text: A connective tissue cell of an organ found in the loose connective tissue..
+- cl_id: CL:0000540
+  name: neuron
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - Rbfox3
+  - MAP2
+  - Snap25
+  - DCX
+  - Tubb3
+  - STMN2
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000540
+  text: The basic cellular unit of nervous tissue.
+- cl_id: CL:0000542
+  name: lymphocyte
+  neg_markers:
+  - CD34
+  - CD14
+  - CD44
+  pos_markers:
+  - Cd3e
+  - PTPRC
+  - CD8A
+  - Cd3g
+  - Cd79a
+  - CD4
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000542
+  text: A lymphocyte is a leukocyte commonly found in the blood and lymph that has
+    the characteristics of a large nucleus, a neutral staining cytoplasm, and prominent
+    heterochromatin..
+- cl_id: CL:0000547
+  name: proerythroblast
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - SPI1
+  - TFRC
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000547
+  text: An immature, nucleated erythrocyte occupying the stage of erythropoeisis that
+    follows formation of erythroid progenitor cells.
+- cl_id: CL:0000575
+  name: corneal epithelial cell
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - KRT12
+  - KRT14
+  - TGFBI
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000575
+  text: An epithelial cell of the cornea..
+- cl_id: CL:0000576
+  name: monocyte
+  neg_markers:
+  - MME
+  - IL7R
+  - CD69
+  pos_markers:
+  - CD14
+  - FCGR3A
+  - LYZ
+  - S100A8
+  - FCN1
+  - CD68
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000576
+  text: Myeloid mononuclear recirculating leukocyte that can act as a precursor of
+    tissue macrophages, osteoclasts and some populations of tissue dendritic cells..
+- cl_id: CL:0000583
+  name: alveolar macrophage
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - Adgre1
+  - APOC1
+  - APOE
+  - CD68
+  - Fcgr1
+  - MARCO
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000583
+  text: A tissue-resident macrophage found in the alveoli of the lungs.
+- cl_id: CL:0000623
+  name: natural killer cell
+  neg_markers:
+  - PECAM1
+  - CD24
+  - IL3RA
+  pos_markers:
+  - NCAM1
+  - FCGR3A
+  - NKG7
+  - GNLY
+  - KLRD1
+  - Klrb1c
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000623
+  text: A lymphocyte that can spontaneously kill a variety of target cells without
+    prior antigenic activation via germline encoded activation receptors and also
+    regulate immune responses via cytokine release and direct contact with other cells..
+- cl_id: CL:0000624
+  name: CD4-positive, alpha-beta T cell
+  neg_markers:
+  - CD34
+  - CD14
+  - CD19
+  pos_markers:
+  - CD4
+  - CD3E
+  - IL7R
+  - CD3D
+  - CCR7
+  - FOXP3
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000624
+  text: A mature alpha-beta T cell that expresses an alpha-beta T cell receptor and
+    the CD4 coreceptor..
+- cl_id: CL:0000625
+  name: CD8-positive, alpha-beta T cell
+  neg_markers:
+  - CD34
+  - CD14
+  - CD19
+  pos_markers:
+  - CD8A
+  - CD3E
+  - CD3D
+  - CD8B
+  - Cd8a
+  - Cd3e
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000625
+  text: A T cell expressing an alpha-beta T cell receptor and the CD8 coreceptor..
+- cl_id: CL:0000646
+  name: basal cell
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - KRT5
+  - Krt5
+  - KRT14
+  - Krt14
+  - TP63
+  - KRT15
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000646
+  text: Undifferentiated; mitotic stem cell for other epithelial cell types; rounded
+    or elliptical with little cytoplasm and few organelles; contain cytokeratin intermediate
+    filament..
+- cl_id: CL:0000669
+  name: pericyte
+  neg_markers:
+  - CD4
+  - CD14
+  - CD38
+  pos_markers:
+  - MCAM
+  - Rgs5
+  - Pdgfrb
+  - CSPG4
+  - PDGFRB
+  - RGS5
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000669
+  text: An elongated, contractile cell found wrapped about precapillary arterioles
+    outside the basement membrane.
+- cl_id: CL:0000738
+  name: leukocyte
+  neg_markers:
+  - CD34
+  - CCR7
+  - MME
+  pos_markers:
+  - PTPRC
+  - Ptprc
+  - CD14
+  - MS4A1
+  - CD8A
+  - FCGR3A
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000738
+  text: An achromatic cell of the myeloid or lymphoid lineages capable of ameboid
+    movement, found in blood or other tissue..
+- cl_id: CL:0000763
+  name: myeloid cell
+  neg_markers:
+  - CCR7
+  - CD44
+  - CD8A
+  pos_markers:
+  - CD14
+  - FCGR3A
+  - CD163
+  - CD68
+  - Cd68
+  - LYZ
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000763
+  text: A cell of the monocyte, granulocyte, mast cell, megakaryocyte, or erythroid
+    lineage..
+- cl_id: CL:0000765
+  name: erythroblast
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - TFRC
+  - Tfrc
+  - AHSP
+  - Fech
+  - GYPA
+  - Gypa
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000765
+  text: A nucleated precursor of an erythrocyte that lacks hematopoietic lineage markers..
+- cl_id: CL:0000775
+  name: neutrophil
+  neg_markers:
+  - CD4
+  - CD8A
+  - Ptprc
+  pos_markers:
+  - FCGR3A
+  - CEACAM8
+  - S100a8
+  - Ly6g
+  - FUT4
+  - FCGR3B
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000775
+  text: Any of the immature or mature forms of a granular leukocyte that in its mature
+    form has a nucleus with three to five lobes connected by slender threads of chromatin,
+    and cytoplasm containing fine inconspicuous granules and stainable by neut.
+- cl_id: CL:0000784
+  name: plasmacytoid dendritic cell
+  neg_markers:
+  - CD14
+  - PECAM1
+  - MME
+  pos_markers:
+  - IL3RA
+  - CLEC4C
+  - LILRA4
+  - NRP1
+  - TCF4
+  - Siglech
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000784
+  text: A dendritic cell type of distinct morphology, localization, and surface marker
+    expression (CD123-positive) from other dendritic cell types and associated with
+    early stage immune responses, particularly the release of physiologically abundan.
+- cl_id: CL:0000786
+  name: plasma cell
+  neg_markers:
+  - CD4
+  - CD34
+  - CD14
+  pos_markers:
+  - SDC1
+  - CD38
+  - MZB1
+  - CD27
+  - JCHAIN
+  - XBP1
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000786
+  text: A terminally differentiated, post-mitotic, antibody secreting cell of the
+    B cell lineage with the phenotype CD138-positive, surface immunonoglobulin-negative,
+    and MHC Class II-negative.
+- cl_id: CL:0000787
+  name: memory B cell
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - CD27
+  - CD19
+  - MS4A1
+  - Nt5e
+  - CR2
+  - Cd38
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000787
+  text: A memory B cell is a mature B cell that is long-lived, readily activated upon
+    re-encounter of its antigenic determinant, and has been selected for expression
+    of higher affinity immunoglobulin.
+- cl_id: CL:0000788
+  name: naive B cell
+  neg_markers:
+  - CD4
+  - CD34
+  - CD14
+  pos_markers:
+  - CD19
+  - TCL1A
+  - IL4R
+  - CD27
+  - MS4A1
+  - FCER2
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000788
+  text: A naive B cell is a mature B cell that has the phenotype surface IgD-positive,
+    surface IgM-positive, CD20-positive, CD27-negative and that has not yet been activated
+    by antigen in the periphery..
+- cl_id: CL:0000798
+  name: gamma-delta T cell
+  neg_markers:
+  - PTPRC
+  - CD34
+  - CD14
+  pos_markers:
+  - CD3D
+  - CD4
+  - CD8B
+  - Cd3e
+  - NCAM1
+  - NKG7
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000798
+  text: A T cell that expresses a gamma-delta T cell receptor complex..
+- cl_id: CL:0000815
+  name: regulatory T cell
+  neg_markers:
+  - PTPRC
+  - CD34
+  - CD14
+  pos_markers:
+  - IL2RA
+  - FOXP3
+  - CD4
+  - CTLA4
+  - Foxp3
+  - Il2ra
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000815
+  text: A T cell which regulates overall immune responses as well as the responses
+    of other T cell subsets through direct cell-cell contact and cytokine release..
+- cl_id: CL:0000816
+  name: immature B cell
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - Ptprc
+  - CD19
+  - CD24
+  - CD38
+  - CD5
+  - CD74
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000816
+  text: An immature B cell is a B cell that has the phenotype surface IgM-positive
+    and surface IgD-negative, and have not undergone class immunoglobulin class switching
+    or peripheral encounter with antigen and activation..
+- cl_id: CL:0000817
+  name: precursor B cell
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD14
+  pos_markers:
+  - CD19
+  - CD34
+  - CD38
+  - Lepr
+  - MME
+  - Mag
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000817
+  text: A precursor B cell is a B cell with the phenotype CD10-positive..
+- cl_id: CL:0000860
+  name: classical monocyte
+  neg_markers:
+  - CD4
+  - CD34
+  - CD38
+  pos_markers:
+  - CD14
+  - FCGR3A
+  - C5AR1
+  - FCAR
+  - CD68
+  - S100A8
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000860
+  text: A monocyte that responds rapidly to microbial stimuli by secreting cytokines
+    and antimicrobial factors and which is characterized by high expression of CCR2
+    in both rodents and humans, negative for the lineage markers CD3, CD19, and CD20,
+    a.
+- cl_id: CL:0000875
+  name: non-classical monocyte
+  neg_markers:
+  - CD4
+  - CD34
+  - CD38
+  pos_markers:
+  - FCGR3A
+  - CD14
+  - CD33
+  - CDKN1C
+  - CEACAM8
+  - CSF1R
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000875
+  text: A type of monocyte characterized by low expression of CCR2, low responsiveness
+    to monocyte chemoattractant CCL2/MCP1, low phagocytic activity, and decrease size
+    relative to classical monocytes, but increased co-stimulatory activity.
+- cl_id: CL:0000893
+  name: thymocyte
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - Cd24a
+  - Klrb1c
+  - Ly6a
+  - SLAMF1
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000893
+  text: An immature T cell located in the thymus..
+- cl_id: CL:0000895
+  name: naive thymus-derived CD4-positive, alpha-beta T cell
+  neg_markers:
+  - PTPRC
+  - CD34
+  - CD14
+  pos_markers:
+  - CCR7
+  - CD4
+  - SELL
+  - TCF7
+  - LEF1
+  - CD27
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000895
+  text: An antigen inexperienced CD4-positive, alpha-beta T cell with the phenotype
+    CCR7-positive, CD127-positive and CD62L-positive.
+- cl_id: CL:0000897
+  name: CD4-positive, alpha-beta memory T cell
+  neg_markers:
+  - PTPRC
+  - CD34
+  - CD14
+  pos_markers:
+  - CD4
+  - IL7R
+  - CD3E
+  - CD69
+  - AQP3
+  - CD3D
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000897
+  text: A CD4-positive, alpha-beta T cell that has differentiated into a memory T
+    cell..
+- cl_id: CL:0000898
+  name: naive T cell
+  neg_markers:
+  - PTPRC
+  - CD34
+  - CD14
+  pos_markers:
+  - CCR7
+  - SELL
+  - CD27
+  - CD4
+  - Ccr7
+  - Sell
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000898
+  text: Mature T cell not yet exposed to antigen with the phenotype CCR7-positive,
+    CD45RA-positive, and CD127-positive.
+- cl_id: CL:0000900
+  name: naive thymus-derived CD8-positive, alpha-beta T cell
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - CCR7
+  - CD8A
+  - CD3D
+  - CD3E
+  - LEF1
+  - TCF7
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000900
+  text: A CD8-positive, alpha-beta T cell that has not experienced activation via
+    antigen contact and has the phenotype CD45RA-positive, CCR7-positive and CD127-positive.
+- cl_id: CL:0000905
+  name: effector memory CD4-positive, alpha-beta T cell
+  neg_markers:
+  - PTPRC
+  - CD34
+  - CD14
+  pos_markers:
+  - CD4
+  - GZMA
+  - IL7R
+  - CCR7
+  - CD28
+  - CXCR5
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000905
+  text: CD4-positive, alpha-beta memory T cell with the phenotype CCR7-negative, CD127-positive,
+    CD45RA-negative, CD45RO-positive, and CD25-negative..
+- cl_id: CL:0000907
+  name: central memory CD8-positive, alpha-beta T cell
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - CCR7
+  - SELL
+  - CD27
+  - CD8A
+  - LEF1
+  - MAL
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000907
+  text: CD8-positive, alpha-beta memory T cell with the phenotype CCR7-positive, CD127-positive,
+    CD45RA-negative, CD45RO-positive, and CD25-negative..
+- cl_id: CL:0000909
+  name: CD8-positive, alpha-beta memory T cell
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - CD8A
+  - CD3E
+  - GZMK
+  - AQP3
+  - CD38
+  - CD3D
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000909
+  text: A CD8-positive, alpha-beta T cell that has differentiated into a memory T
+    cell..
+- cl_id: CL:0000913
+  name: effector memory CD8-positive, alpha-beta T cell
+  neg_markers:
+  - PTPRC
+  - CD34
+  - CD14
+  pos_markers:
+  - CD8A
+  - CD8B
+  - CXCR3
+  - CD52
+  - ITGA1
+  - CD44
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000913
+  text: CD8-positive, alpha-beta memory T cell with the phenotype CCR7-negative, CD127-positive,
+    CD45RA-negative, CD45RO-positive, and CD25-negative..
+- cl_id: CL:0000940
+  name: mucosal-associated invariant T cell
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - KLRB1
+  - SLC4A10
+  - DPP4
+  - CCR6
+  - CD69
+  - GZMK
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000940
+  text: An alpha-beta T cell that is found in the lamina propria of mucosal tissues
+    and is restricted by the MR-1 molecule.
+- cl_id: CL:0000988
+  name: hematopoietic cell
+  neg_markers:
+  - CCR7
+  - MME
+  - IL7R
+  pos_markers:
+  - PTPRC
+  - CD34
+  - CD14
+  - IL3RA
+  - KIT
+  - PROM1
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000988
+  text: A cell of a hematopoietic lineage..
+- cl_id: CL:0000990
+  name: conventional dendritic cell
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - CLEC9A
+  - THBD
+  - CCR7
+  - Cd74
+  - H2-Oa
+  - Zbtb46
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0000990
+  text: Conventional dendritic cell is a dendritic cell that is CD11c-high..
+- cl_id: CL:0001054
+  name: CD14-positive monocyte
+  neg_markers:
+  - PTPRC
+  - CD34
+  - CD38
+  pos_markers:
+  - CD14
+  - LYZ
+  - FCGR3A
+  - ALOX5AP
+  - CD4
+  - F5
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0001054
+  text: A monocyte that expresses CD14 and is negative for the lineage markers CD3,
+    CD19, and CD20..
+- cl_id: CL:0002038
+  name: T follicular helper cell
+  neg_markers:
+  - PTPRC
+  - CD34
+  - CD14
+  pos_markers:
+  - CXCR5
+  - PDCD1
+  - ICOS
+  - CD4
+  - CXCR3
+  - BCL6
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0002038
+  text: A CD4-positive, CXCR5-positive, CCR7-negative alpha-beta T cell located in
+    follicles of secondary lymph nodes that is BCL6-high, ICOS-high and PD1-high,
+    and stimulates follicular B cells to undergo class-switching and antibody production..
+- cl_id: CL:0002063
+  name: pulmonary alveolar type 2 cell
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - Etv5
+  - Sftpc
+  - Lamp3
+  - SFTPC
+  - ABCA3
+  - LAMP3
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0002063
+  text: A pulmonary alveolar epithelial cell that modulates the fluid surrounding
+    the alveolar epithelium by secreting and recycling surfactants via specialized
+    organelles called alveolar lamellar bodies.
+- cl_id: CL:0002079
+  name: pancreatic ductal cell
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - KRT19
+  - Krt19
+  - SOX9
+  - KRT7
+  - PDX1
+  - Sox9
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0002079
+  text: Epithelial cell found in the ducts of the pancreas.
+- cl_id: CL:0002132
+  name: stromal cell of ovary
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - DLK1
+  - FOXL2
+  - STAR
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0002132
+  text: A stomal cell of the ovary.
+- cl_id: CL:0002275
+  name: pancreatic PP cell
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - AQP3
+  - ARX
+  - CARTPT
+  - CHN2
+  - EGR3
+  - ENTPD2
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0002275
+  text: A PP cell located in the islets of the pancreas..
+- cl_id: CL:0002326
+  name: luminal epithelial cell of mammary gland
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - ANKRD30A
+  - Agrp
+  - ESR1
+  - ETFA
+  - Epas1
+  - FLOT2
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0002326
+  text: A mammary epithelial cell that occurs in the lumen of the ductal and alveoli
+    structure in the breast..
+- cl_id: CL:0002350
+  name: endocardial cell
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - Npr3
+  - CDH5
+  - Cdh5
+  - ENG
+  - Fli1
+  - GATA5
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0002350
+  text: An endothelial cell that lines the intracavitary lumen of the heart, separating
+    the circulating blood from the underlying myocardium.
+- cl_id: CL:0002393
+  name: intermediate monocyte
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - FCGR3A
+  - CD14
+  - CD33
+  - CEACAM8
+  - FUT4
+  - IL3RA
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0002393
+  text: A monocyte that has characteristics of both patrolling and inflammatory monocytes..
+- cl_id: CL:0002543
+  name: vein endothelial cell
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - Ephb4
+  - VWF
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0002543
+  text: An endothelial cell that is part of the vein..
+- cl_id: CL:0002623
+  name: acinar cell of salivary gland
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - ALCAM
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0002623
+  text: An acinar cell that is part of the salivary gland epithelium, responsible
+    for synthesizing and secreting the primary saliva essential for oral digestion,
+    antimicrobial defense, and mucosal immunity.
+- cl_id: CL:0008001
+  name: hematopoietic precursor cell
+  neg_markers:
+  - CD4
+  - CD38
+  - CCR7
+  pos_markers:
+  - CD14
+  - CD34
+  - IL3RA
+  - KIT
+  - PTPRC
+  - THY1
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0008001
+  text: Any hematopoietic cell that is a precursor of some other hematopoietic cell
+    type..
+- cl_id: CL:0008019
+  name: mesenchymal cell
+  neg_markers:
+  - CD4
+  - CD14
+  - CD38
+  pos_markers:
+  - Col1a1
+  - Pdgfra
+  - PDGFRA
+  - VIM
+  - COL1A1
+  - PDGFRB
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_0008019
+  text: A non-polarised cell precursor cell that is part of some mesenchyme, is associated
+    with the cell matrix but is not connected to other cells and is capable of migration..
+- cl_id: CL:1000398
+  name: endothelial cell of hepatic sinusoid
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - FCGR2B
+  - LYVE1
+  - CLEC1B
+  - CLEC4G
+  - CLEC4M
+  - DNASE1L3
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_1000398
+  text: An endothelial cell that is part of the hepatic sinusoid.
+- cl_id: CL:1000413
+  name: endothelial cell of artery
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - Ephb2
+  - GJA5
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_1000413
+  text: A blood vessel endothelial cell that is part of an arterial endothelium..
+- cl_id: CL:1001431
+  name: kidney collecting duct principal cell
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - Apela
+  - Aqp2
+  - Aqp3
+  - Avpr2
+  - Cav1
+  - Cdh16
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_1001431
+  text: Any renal principal cell that is part of some collecting duct of renal tubule..
+- cl_id: CL:1001474
+  name: medium spiny neuron
+  neg_markers:
+  - PTPRC
+  - CD4
+  - CD34
+  pos_markers:
+  - EBF1
+  - FOXP1
+  - GRIK3
+  - ISL1
+  - Ppp1r1b
+  - SIX3
+  provenance: cellmarker2:Human:bf52b8cd,Mouse:e66bc8e1,sctype:f9adcf25:CL_1001474
+  text: An inhibitory, GABAergic projection neuron in the striatum that integrates
+    glutamatergic signals arising from the cerebral cortex and thalamus..
+source: curated from CellMarker 2.0 (Nucleic Acids Research 2023, 51:D870-D876) (markers,
+  via the resource's own cellontology_id column) and ScTypeDB_full.xlsx (Nature Communications
+  2022, 13:1246) (fallback); text is the Cell Ontology release's own definition (cl-basic.json
+  sha256 85d3febd49c2). Never derived from a benchmark atlas.
+synonyms:
+  CSF1R:
+  - CD115
+  FCGR3A:
+  - CD16
+  FCGR3B:
+  - CD16B
+  IL7R:
+  - CD127
+  ITGAM:
+  - CD11B
+  ITGAX:
+  - CD11C
+  KLRD1:
+  - CD94
+  MS4A1:
+  - CD20
+  NCAM1:
+  - CD56
+  PECAM1:
+  - CD31
+  PTPRC:
+  - CD45
+version: v2
