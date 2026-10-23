@@ -24,7 +24,6 @@ from __future__ import annotations
 import csv
 import json
 import sys
-from collections import Counter
 from pathlib import Path
 
 import numpy as np
@@ -32,7 +31,7 @@ import numpy as np
 ROOT = Path("/mnt/f/E/hermes-workspace/scKevType")
 sys.path.insert(0, str(ROOT / "baselines"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from singler_label_map import singler_label_to_cl  # noqa: E402
+from singler_label_map import singler_label_to_cl
 
 TOOLS = ROOT / "reports" / "annotation-tools"
 BASE = ROOT / "baselines" / "out" / "celltypist"
@@ -100,6 +99,16 @@ def check2() -> dict:
 
 
 def main() -> int:
+    import argparse
+
+    global TOOLS
+    parser = argparse.ArgumentParser(description="Validate the census run against artefacts on disk.")
+    parser.add_argument("--dir", default=str(TOOLS),
+                        help="the working directory 01/02/03/04b/04c wrote into")
+    args = parser.parse_args()
+    TOOLS = Path(args.dir).resolve()
+    if not (TOOLS / "questions.jsonl").exists():
+        raise SystemExit(f"{TOOLS / 'questions.jsonl'}: not found -- run the earlier steps with this --dir first")
     print("CHECK 1: census CellTypist run vs the project's own baseline")
     c1 = check1()
     print("CHECK 2: SingleR recall where the reference covers the type")

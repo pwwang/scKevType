@@ -20,9 +20,25 @@ that file declares for it, because the extraction those arms need did not exist 
     siletti             Adult_Human_MTG (tissue-matched), Immune_All_Low
     tabula_muris_senis  Adult_Mouse_Gut (the only mouse tissue model), Immune_All_Low with
                         case-matched (uppercased) symbols
-    tabula_sapiens      Immune_All_Low (its reference is immune; 311 of these 439 cells are
-                        immune-compartment), Human_Lung_Atlas (the only human tissue model
-                        whose tissue the corpus's tabula_sapiens cells cover)
+    tabula_sapiens      Immune_All_Low (its reference is immune), Human_Lung_Atlas (the only
+                        human tissue model whose tissue the corpus's tabula_sapiens cells cover)
+
+The v4 population adds two datasets, and their arms are declared by the same rule at the same
+time as the rest (before any score is computed; the vocabulary computation behind the decision
+is in `scratch/at-v4/probe_arms.log` and repeated in the v4 report):
+
+    dominguez_conde     a 20-tissue human immune atlas -> Immune_All_Low (documented default,
+                        and CellTypist's pan-immune reference is that same tissue family),
+                        Immune_All_High (the same reference at its coarser 32-label taxonomy)
+    hao_cite            healthy PBMC CITE-seq, blood -> Immune_All_Low, Immune_All_High
+
+The blood/tonsil/liver/gut tissue models that also exist in this install are **not** declared:
+their reference vocabularies are single-study (the three COVID-19 blood models place 0-2 of
+their labels on a register term at all, tonsil 3 of 117 by name), and none of them is in the
+project's dumped model vocabulary (`baselines/out/celltypist_models.json`) that the
+harmonisation path reads, so declaring one would mean extending that artefact to score a
+reference that cannot express the answer. That is stated in the report rather than left as an
+implicit choice.
 
 The report quotes, per dataset, both the default-model arm and the **best arm** (the maximum
 over these arms), because the referee's objection is strongest in its best form.
@@ -45,6 +61,10 @@ Run (WSL, from the repo root; celltypist is not in the venv, so uv's ephemeral l
     source scripts/wsl/env.sh
     uv run --with celltypist==1.7.1 --with scanpy==1.12.4 --no-sync \
         python scripts/annotation-tools/03_celltypist.py
+
+    # the v4 population, reading its matrices out of its own working directory
+    uv run --with celltypist==1.7.1 --with scanpy==1.12.4 --no-sync \
+        python scripts/annotation-tools/03_celltypist.py --dir reports/annotation-tools-v4
 """
 
 from __future__ import annotations
@@ -60,11 +80,12 @@ import scipy.sparse as sp
 
 ROOT = Path("/mnt/f/E/hermes-workspace/scKevType")
 sys.path.insert(0, str(ROOT / "baselines"))
-from lib_common import resolve_celltypist_map  # noqa: E402
-from step3_celltypist import collapse_duplicate_genes  # noqa: E402
+from lib_common import resolve_celltypist_map
+from step3_celltypist import collapse_duplicate_genes
 
 EXPR = ROOT / "reports" / "annotation-tools" / "expr"
 OUT = ROOT / "reports" / "annotation-tools" / "celltypist"
+WORK = ROOT / "reports" / "annotation-tools"
 
 #: dataset -> [(arm, model file, symbol transform, why)]
 ARMS: dict[str, list[tuple[str, str, str, str]]] = {
@@ -94,6 +115,21 @@ ARMS: dict[str, list[tuple[str, str, str, str]]] = {
         ("lung_atlas", "Human_Lung_Atlas.pkl", "none",
          "the only human tissue model whose tissue the corpus's tabula_sapiens cells cover"),
     ],
+    "dominguez_conde": [
+        ("immune_low", "Immune_All_Low.pkl", "none",
+         ("CellTypist's documented default, and its pan-immune reference covers this atlas's "
+          "tissue family (20 tissues, immune cells)")),
+        ("immune_high", "Immune_All_High.pkl", "none",
+         ("the same pan-immune reference at its coarser 32-label taxonomy: the second reading of "
+          "the same question, declared before any score was computed")),
+    ],
+    "hao_cite": [
+        ("immune_low", "Immune_All_Low.pkl", "none",
+         "CellTypist's documented default; PBMC immune cells are its reference's own subject"),
+        ("immune_high", "Immune_All_High.pkl", "none",
+         ("the same pan-immune reference at its coarser 32-label taxonomy, declared before any "
+          "score was computed")),
+    ],
 }
 
 
@@ -115,8 +151,8 @@ def load(dataset: str):
 
 def run_arm(dataset: str, arm: str, model: str, transform: str, why: str) -> dict:
     import anndata as ad
-    import scanpy as sc
     import celltypist
+    import scanpy as sc
     from celltypist import models
 
     t0 = time.time()
@@ -166,6 +202,7 @@ def run_arm(dataset: str, arm: str, model: str, transform: str, why: str) -> dic
         "symbol_transform": transform,
         "celltypist_version": celltypist.__version__,
         "scanpy_version": sc.__version__,
+        "anndata_version": ad.__version__,
         "cells": len(cells),
         "genes_input": len(genes),
         "duplicate_symbols_collapsed": n_collapsed,
@@ -191,13 +228,37 @@ def _top(predicted, k: int = 8) -> list:
 
 
 def main() -> int:
-    only = None
-    for arg in sys.argv[1:]:
-        if arg.startswith("--datasets="):
-            only = {x.strip() for x in arg.split("=", 1)[1].split(",") if x.strip()}
-    selected = [d for d in ARMS if not only or d in only]
+    import argparse
+
+    parser = argparse.ArgumentParser(description="CellTypist on the population's cells.")
+    parser.add_argument("--dir", default=str(WORK),
+                        help="the working directory: expr/ is read from it, celltypist/ written to it")
+    parser.add_argument("--datasets", default=None,
+                        help="comma-separated datasets (default: every dataset with a declared arm set)")
+    args = parser.parse_args()
+    global EXPR, OUT
+    work = Path(args.dir).resolve()
+    EXPR = work / "expr"
+    OUT = work / "celltypist"
+    only = {x.strip() for x in args.datasets.split(",") if x.strip()} if args.datasets else None
+    # the datasets to run are the ones the population names, not the keys of ARMS: ARMS carries
+    # an arm set for every dataset either population has, and the matrix for a dataset the
+    # population does not name is not on disk here.
+    questions = work / "questions.jsonl"
+    if not questions.exists():
+        raise SystemExit(f"{questions}: not found -- run 01/02 with --dir {work} first")
+    present: list[str] = []
+    with open(questions, encoding="utf-8") as fh:
+        for line in fh:
+            dataset = json.loads(line)["dataset"]
+            if dataset not in present:
+                present.append(dataset)
+    undeclared = sorted(d for d in present if d not in ARMS)
+    if undeclared:
+        raise SystemExit(f"no arm set is declared for {undeclared} -- declare one, do not default it")
+    selected = [d for d in ARMS if d in present and (not only or d in only)]
     if not selected:
-        raise SystemExit(f"--datasets={sorted(only) if only else None} matched none of {sorted(ARMS)}")
+        raise SystemExit(f"--datasets={sorted(only) if only else None} matched none of {sorted(present)}")
     stats: dict[str, dict] = {}
     for dataset in selected:
         print(f"[{dataset}] {len(ARMS[dataset])} arms", flush=True)
@@ -209,14 +270,17 @@ def main() -> int:
                   f"mapped={s['predictions_mapped_rate']} cover={s['model_feature_coverage']} "
                   f"({s['seconds']}s)", flush=True)
             print(f"      top: {s['top_predicted_labels'][:5]}", flush=True)
-    out = ROOT / "reports" / "annotation-tools" / "celltypist.summary.json"
+    out = work / "celltypist.summary.json"
     payload = json.loads(out.read_text(encoding="utf-8")) if out.exists() else {}
     payload.update(stats)
     payload["_provenance"] = {
         "argv": sys.argv[1:],
+        "dir": str(work),
         "arms": sorted(stats),
         "note": "arms are the pre-declared set from baselines/step3_celltypist.py, extended to "
-                "tabula_sapiens with the two arms that file declares for it",
+                "tabula_sapiens with the two arms that file declares for it, and extended to the "
+                "v4 population's two new datasets (dominguez_conde, hao_cite) with the two "
+                "pan-immune arms declared in ARMS above",
     }
     out.write_text(json.dumps(payload, indent=2), encoding="utf-8")
     print(f"wrote {out} ({len(stats)} arms)")

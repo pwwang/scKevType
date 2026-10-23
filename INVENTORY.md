@@ -5,9 +5,12 @@ repository's root.
 
 **Scope.** The deposit is the code that produces the paper's numbers: the package, the training /
 evaluation / inference runners, the harness that submits requests to the Jev API and to frontier
-models, the Slurm plumbing that actually trains and scores, and the analysis that computes the
-paper's statistics from scored outputs — with the tests for each layer. Data and results are not
-part of it; `README.md` says what a run has to supply.
+models, the standard-annotator pipeline, and the analysis that computes the paper's statistics
+from scored outputs — with the tests for each layer. The submission plumbing is **not** in the
+deposit: the jobs that ran on the training cluster, their submission scripts, and the cluster
+paths, accounts and partitions those carry are deliberately absent, so nothing here names a
+cluster filesystem or a scheduler queue. Data and results are not part of it either; `README.md`
+says what a run has to supply.
 
 ## Included
 
@@ -186,12 +189,11 @@ The two measured atlas inventories per seed version (`atlas_labels.json`, `atlas
 - `scripts/llm/score.py`
 - `scripts/llm/verify-asks.py`
 
-### scripts/jev/ — Jev API submission and scoring: draw the census populations the asks are taken on (`census-sample-v4.py`, `census-sample-baron.py`), the end-to-end ask pipeline with the key read from `JEV_KEY` (`run-smoke.sh`), score Jev's answers on the census population under the settled forced-abstention rules (`score-census-v4.py`, `score-noul-v4.py`), test whether batching families changes the answers (`equivalence.py`), and the probe/census superset check (`subset-check.py`).  (8 files)
+### scripts/jev/ — Jev API submission and scoring: draw the census populations the asks are taken on (`census-sample-v4.py`, `census-sample-baron.py`), the end-to-end ask pipeline with the key read from `JEV_KEY` (`run-smoke.sh`), score Jev's answers on the census population under the settled forced-abstention rules (`score-census-v4.py`, `score-noul-v4.py`), test whether batching families changes the answers (`equivalence.py`), and the probe/census superset check (`subset-check.py`).  (7 files)
 
 - `scripts/jev/census-sample-baron.py`
 - `scripts/jev/census-sample-v4.py`
 - `scripts/jev/equivalence.py`
-- `scripts/jev/jev-v4-ask.sh`
 - `scripts/jev/run-smoke.sh`
 - `scripts/jev/score-census-v4.py`
 - `scripts/jev/score-noul-v4.py`
@@ -206,7 +208,7 @@ The two measured atlas inventories per seed version (`atlas_labels.json`, `atlas
 - `scripts/kev/kev_probe.py`
 - `scripts/kev/selftest.py`
 
-### scripts/annotation-tools/ — the census baseline pipeline that runs the standard annotators (CellTypist, SingleR, Azimuth) on the census cells and scores them on the corpus's own questions: probes, question/matrix extraction, the annotator runs including the R references, scoring, the harmonisation sensitivity check and the validation step.  (13 files)
+### scripts/annotation-tools/ — the census baseline pipeline that runs the standard annotators (CellTypist, SingleR, Azimuth) on the census cells and scores them on the corpus's own questions: probes, question/matrix extraction, the annotator runs including the R references, scoring, the harmonisation sensitivity check, the validation step, and the steps that turn a run into the paper's comparison tables — `08_report.py` for the published v2 population, `09_report_v4.py` for the v4 one — together with `10_equivalence_v2.py`, the proof that parameterising the pipeline by population and working directory still reproduces the published v2 numbers exactly. The population and the working directory are arguments (`--population`, `--dir`), so the same steps run on either.  (16 files)
 
 - `scripts/annotation-tools/00_probe_tabula_sapiens.py`
 - `scripts/annotation-tools/00b_probe_tissues.py`
@@ -219,7 +221,10 @@ The two measured atlas inventories per seed version (`atlas_labels.json`, `atlas
 - `scripts/annotation-tools/05_score.py`
 - `scripts/annotation-tools/06_harmonisation_sensitivity.py`
 - `scripts/annotation-tools/07_validate.py`
+- `scripts/annotation-tools/08_report.py`
 - `scripts/annotation-tools/09_azimuth_siletti.R`
+- `scripts/annotation-tools/09_report_v4.py`
+- `scripts/annotation-tools/10_equivalence_v2.py`
 - `scripts/annotation-tools/singler_label_map.py`
 
 ### scripts/ — analysis and measurement (top level) — statistics computed from scored rows, and measurements taken on the training path: the cross-engine accuracy table, the forced-naming rows, the axis-1 audit and recompute, confusion structure, the noul column, per-seed spread and the frozen-configuration check, the token-budget measurements, the hardware/memory probes, and the panel-swap extraction.  (27 files)
@@ -252,21 +257,17 @@ The two measured atlas inventories per seed version (`atlas_labels.json`, `atlas
 - `scripts/step10-train-verify.sh`
 - `scripts/verify-real-v2.sh`
 
-### scripts/ — remaining subdirectories — learning-curve suite builder, the speed/cost measurement harness, the panel-swap builder, and the WSL/Linux environment bootstrap the README names.  (15 files)
+### scripts/ — remaining subdirectories — learning-curve suite builder, the speed/cost measurement harness (its measurement scripts only: the wrappers that submitted those passes are the submission plumbing and are not carried), the panel-swap builder, and the WSL/Linux environment bootstrap the README names.  (11 files)
 
 - `scripts/baselines/capped_population.py`
 - `scripts/baselines/extend_label_map.py`
 - `scripts/eval/build_panel_swaps.py`
 - `scripts/learning-curve/build-suites.py`
-- `scripts/speed-cost/census-crosscheck.sh`
 - `scripts/speed-cost/collect_timing.py`
 - `scripts/speed-cost/dump_stats.py`
 - `scripts/speed-cost/io-probe.sh`
 - `scripts/speed-cost/jev-timing.sh`
-- `scripts/speed-cost/kev-timing-task.sh`
-- `scripts/speed-cost/laya-timing-task.sh`
 - `scripts/speed-cost/laya-timing.py`
-- `scripts/speed-cost/submit-speed-cost.sh`
 - `scripts/wsl/bootstrap.sh`
 - `scripts/wsl/env.sh`
 
@@ -278,18 +279,23 @@ The two measured atlas inventories per seed version (`atlas_labels.json`, `atlas
 
 ### Repository metadata — build metadata, lock file, reference requirements
 
-- `pyproject.toml`, `uv.lock`, `.python-version`, `cluster/reqs-cluster.txt`
+- `pyproject.toml`, `uv.lock`, `.python-version`
 
 ## analysis/ — the statistics behind the paper
 
-`analysis/` holds the fifteen scripts that compute the paper's statistics from scored rows, and
-`tests/analysis/` the ten pytest modules that pin their arithmetic and their refusals. Between them
-they cover: the reconciliation of every served / abstain-pick / forced reading on the census-matched
-populations and on the external-validation (Baron) suite; the paired tests and the p-values the paper
-quotes, including the exact two-sided binomial on discordant pairs the headline comparisons use; the
+`analysis/` holds the sixteen scripts that compute the paper's statistics from scored rows, and
+`tests/analysis/` the ten pytest modules that pin their arithmetic and their refusals. (Ten, not
+sixteen: a test is carried where a claim turned on the arithmetic or on a refusal, not once per
+script, so several of the scripts below intentionally have none.) Between them they cover: the
+reconciliation of every served / abstain-pick / forced reading on the census-matched populations and
+on the external-validation (Baron) suite; the paired tests and the p-values the paper quotes,
+including the exact two-sided binomial on discordant pairs the headline comparisons use; the
 calibration (ECE / Brier) tables; the per-dataset and per-family breakdowns; the census-versus-corpus
-checks; the Laya joins; the learning-curve scoring; and the variant-redundancy audit that asks
-whether a duplicated `panel_choice` cell is load-bearing.
+checks; the Laya joins; the learning-curve scoring; the variant-redundancy audit that asks whether a
+duplicated `panel_choice` cell is load-bearing; and the ontology-aware reading of every arm of both
+the paper's engines and the reference-based annotators (`ontology-aware-reading-v4.py`), which
+re-measures the same 4,035 questions under exact / subtype / parent / related readings, served and
+forced.
 
 ### Running them
 
@@ -317,7 +323,7 @@ a settled script re-runs its own aggregation at import time, so importing it is 
 references are paths resolved from the repository root into `analysis/` (`ROOT / "analysis" /
 "<name>.py"`), so they resolve wherever the repository is checked out.
 
-### analysis/ — the statistics scripts  (15 files)
+### analysis/ — the statistics scripts  (16 files)
 
 - `analysis/abstain-reconciliation.py`
 - `analysis/abstain-reconciliation-v4.py`
@@ -329,6 +335,7 @@ references are paths resolved from the repository root into `analysis/` (`ROOT /
 - `analysis/laya-v4-noul-reconcile.py`
 - `analysis/laya-v4-reconcile.py`
 - `analysis/learning-curve-score.py`
+- `analysis/ontology-aware-reading-v4.py`
 - `analysis/paired-tests-baron.py`
 - `analysis/paired-tests-v4.py`
 - `analysis/per-dataset-v4.py`

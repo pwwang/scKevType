@@ -34,10 +34,22 @@ Metrics per arm (one arm = one tool + one model/reference + one label vocabulary
 CellTypist never abstains, so no abstain column exists for it; SingleR has no abstain *action*
 either -- `pruned` is a low-confidence flag, not a decision to decline.
 
+THE WORKING DIRECTORY IS A PARAMETER
+------------------------------------
+``--dir`` points at the directory ``01``/``02``/``03``/``04b``/``04c`` worked in, so the same
+scorer covers the v2 population (``reports/annotation-tools``, the default) and the v4 one
+(``reports/annotation-tools-v4``). Everything it reports is read from that directory: the
+question table, the two tools' outputs, and their summaries. The dataset -> SingleR reference
+and dataset -> declared-best-arm tables below carry an entry for every dataset either population
+names; an undeclared dataset is a hard error, never a silent skip.
+
 Run (WSL, from the repo root):
 
     source scripts/wsl/env.sh
     uv run --no-sync python scripts/annotation-tools/05_score.py
+
+    # the v4 population
+    uv run --no-sync python scripts/annotation-tools/05_score.py --dir reports/annotation-tools-v4
 """
 
 from __future__ import annotations
@@ -52,8 +64,8 @@ import numpy as np
 ROOT = Path("/mnt/f/E/hermes-workspace/scKevType")
 sys.path.insert(0, str(ROOT / "baselines"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from lib_common import resolve_celltypist_map  # noqa: E402
-from singler_label_map import (  # noqa: E402
+from lib_common import resolve_celltypist_map
+from singler_label_map import (
     HPCA_FINE_OVERRIDE,
     HPCA_MAIN,
     MOUSE_FINE_OVERRIDE,
@@ -83,18 +95,24 @@ SINGLER_REFERENCE = {
     "siletti": "human",
     "tabula_sapiens": "human",
     "tabula_muris_senis": "mouse",
+    # the v4 population's two additional datasets: human immune (cross-tissue) and human PBMC
+    "dominguez_conde": "human",
+    "hao_cite": "human",
 }
 
 #: dataset -> the arm that is the *most favourable* to CellTypist, fixed in advance by the rule
 #: "the tissue/species-matched model where CellTypist ships one, else its documented default".
 #: (This is the same rule the arm table in 03_celltypist.py is declared under; the score script
 #: takes the maximum over the declared arms rather than trusting this list, and asserts they
-#: agree.)
+#: agree. For the two v4 immune datasets the matched models ARE the two pan-immune arms, so the
+#: rule's answer there is CellTypist's documented default, Immune_All_Low.)
 CELLTYPIST_BEST = {
     "muraro": "pancreatic_islet",
     "siletti": "mtg",
     "tabula_muris_senis": "mouse_gut",
     "tabula_sapiens": "immune_low",
+    "dominguez_conde": "immune_low",
+    "hao_cite": "immune_low",
 }
 
 
@@ -226,12 +244,31 @@ def celltypist_arm(dataset: str, arm: str) -> dict:
 
 
 def main() -> int:
+    import argparse
+
+    global TOOLS, QUESTIONS, CELLTYPIST, SINGLER
+    parser = argparse.ArgumentParser(description="Score CellTypist and SingleR on the population.")
+    parser.add_argument("--dir", default=str(TOOLS),
+                        help="the working directory 01/02/03/04b/04c wrote into")
+    args = parser.parse_args()
+    TOOLS = Path(args.dir).resolve()
+    QUESTIONS = TOOLS / "questions.jsonl"
+    CELLTYPIST = TOOLS / "celltypist"
+    SINGLER = TOOLS / "singler"
+    for path in (QUESTIONS, TOOLS / "celltypist.summary.json", TOOLS / "singler.summary.json"):
+        if not path.exists():
+            raise SystemExit(f"{path}: not found -- run the earlier steps with --dir {TOOLS} first")
+
     questions = load_questions()
+    questions_summary = json.loads((TOOLS / "questions.summary.json").read_text(encoding="utf-8"))
     name_to_cl, cl_to_name = definitions()
     by_dataset: dict[str, list[dict]] = {}
     for q in questions:
         by_dataset.setdefault(q["dataset"], []).append(q)
     print("questions per dataset:", {k: len(v) for k, v in sorted(by_dataset.items())})
+    undeclared = sorted(d for d in by_dataset if d not in SINGLER_REFERENCE or d not in CELLTYPIST_BEST)
+    if undeclared:
+        raise SystemExit(f"no SingleR reference / declared best arm for {undeclared} -- declare it, do not default it")
 
     results: dict[str, dict] = {"celltypist": {}, "singler": {}}
 
@@ -254,6 +291,11 @@ def main() -> int:
             probabilities=data["probabilities"], labels=data["labels"], cell_order=data["cells"],
             vocabulary={c for c, in resolve_map_cache.values() if c},
         )
+        # every label this arm's map could not place, listed rather than absorbed: the count is
+        # `unmapped`, the names are these
+        unmapped_names = sorted({p for p, c in zip(data["predicted"], data["mapped_cl"]) if c is None})
+        off_register_names = sorted({p for p, c in zip(data["predicted"], data["mapped_cl"])
+                                     if c is not None and c not in name_to_cl.values()})
         scored.update({
             "tool": "celltypist", "dataset": dataset, "arm": arm, "model": arms[key]["model"],
             "model_sha256": arms[key]["model_sha256"],
@@ -263,6 +305,8 @@ def main() -> int:
             "top_predicted_labels": arms[key]["top_predicted_labels"],
             "mean_max_probability": arms[key]["mean_max_probability"],
             "model_feature_coverage": arms[key]["model_feature_coverage"],
+            "unmapped_label_names": unmapped_names,
+            "off_register_label_names": off_register_names,
             "seconds": arms[key]["seconds"],
         })
         results["celltypist"][key] = scored
@@ -279,6 +323,7 @@ def main() -> int:
         for level in ("main", "fine"):
             per_cell = {}
             seen = set()
+            label_cl: dict[str, str | None] = {}
             for r in rows:
                 label = r[f"label_{level}"]
                 seen.add(label)
@@ -286,6 +331,7 @@ def main() -> int:
                 pruned = (r[f"pruned_{level}"] in ("", "NA", "None")) or (
                     r[f"pruned_{level}"] is None)
                 per_cell[r["cell"]] = (cl, basis, pruned)
+                label_cl[label] = cl
             scored = score_arm(by_dataset[dataset], per_cell, name_to_cl,
                                vocabulary=singler_vocabulary(reference))
             scored.update({
@@ -296,6 +342,12 @@ def main() -> int:
                 "cells_scored": len(rows),
                 "distinct_predicted_labels": singler_meta[dataset][f"label_{level}_distinct"],
                 "unmapped_labels": unknown_singler_labels(seen, reference, level),
+                # the labels that DID resolve but to a CL term the corpus's register does not
+                # hold: placed, yet unable to equal an option
+                "off_register_label_names": sorted(
+                    label for label, cl in label_cl.items()
+                    if cl is not None and cl not in name_to_cl.values()),
+                "seconds": singler_meta[dataset].get("seconds"),
             })
             results["singler"][f"{dataset}/label_{level}"] = scored
             print(f"  singler {dataset}/label_{level}: named_target={scored['named_target_rate']} "
@@ -359,11 +411,14 @@ def main() -> int:
 
     payload = {
         "population": {
-            "source": "reports/census-suite-ids.jsonl, family == panel_choice",
+            "source": questions_summary["population"],
+            "population_sha256": questions_summary.get("population_sha256"),
             "questions": len(questions),
             "distinct_cells": len({(q["dataset"], q["cell"]) for q in questions}),
             "per_dataset": {k: len(v) for k, v in sorted(by_dataset.items())},
             "mapping": "tool label -> CL id (harmonised) == the question's target option's CL id",
+            "working_directory": str(TOOLS),
+            "checks": questions_summary.get("checks"),
         },
         "per_arm": results,
         "pooled": pooled_out,

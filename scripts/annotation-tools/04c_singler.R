@@ -20,7 +20,12 @@
 # reported as a separate column rather than folded into the accuracy, because a standard
 # annotator that declines to call a cell is still answering the question by not answering it.
 #
-# Usage:  Rscript scripts/annotation-tools/04c_singler.R
+# Usage:  Rscript scripts/annotation-tools/04c_singler.R [--dir=<working directory>]
+#
+# The working directory defaults to reports/annotation-tools (the v2 population); the v4 run
+# passes --dir=reports/annotation-tools-v4. The dataset list is read off <dir>/r-input/, so the
+# run covers exactly the datasets 04b exported, and a dataset with no declared reference is a
+# hard error rather than a silent skip.
 
 suppressPackageStartupMessages({
   library(celldex)
@@ -31,16 +36,28 @@ suppressPackageStartupMessages({
 
 .libPaths(c(Sys.getenv("R_LIBS_USER"), .libPaths()))
 ROOT <- "/mnt/f/E/hermes-workspace/scKevType"
-IN <- file.path(ROOT, "reports", "annotation-tools", "r-input")
-OUT <- file.path(ROOT, "reports", "annotation-tools", "singler")
+args <- commandArgs(trailingOnly = TRUE)
+dir_arg <- grep("^--dir=", args, value = TRUE)
+WORK <- if (length(dir_arg)) sub("^--dir=", "", dir_arg[[1]]) else file.path(ROOT, "reports", "annotation-tools")
+IN <- file.path(WORK, "r-input")
+OUT <- file.path(WORK, "singler")
 dir.create(OUT, showWarnings = FALSE, recursive = TRUE)
 
 refs <- list(human = HumanPrimaryCellAtlasData(), mouse = MouseRNAseqData())
-which_ref <- c(muraro = "human", siletti = "human", tabula_sapiens = "human",
-               tabula_muris_senis = "mouse")
+which_ref <- c(muraro = "human", siletti = "human", tabula_sapiens = "human", hao_cite = "human",
+               dominguez_conde = "human", tabula_muris_senis = "mouse")
+
+datasets <- sort(list.dirs(IN, recursive = FALSE, full.names = FALSE))
+if (!length(datasets)) stop(sprintf("no datasets under %s -- run 04b first", IN))
+undeclared <- setdiff(datasets, names(which_ref))
+if (length(undeclared)) stop(sprintf("no SingleR reference is declared for: %s",
+                                     paste(undeclared, collapse = ", ")))
+cat(sprintf("working directory %s; datasets: %s\n", WORK, paste(datasets, collapse = ", ")))
 
 meta <- list()
-for (dataset in names(which_ref)) {
+t_start <- Sys.time()
+for (dataset in datasets) {
+  t_dataset <- Sys.time()
   d <- file.path(IN, dataset)
   m <- readMM(file.path(d, "matrix.mtx"))
   genes <- readLines(file.path(d, "genes.txt"))
@@ -101,6 +118,7 @@ for (dataset in names(which_ref)) {
     label_fine_distinct = length(unique(res$fine$label)),
     label_main_pruned_na = sum(is.na(res$main$pruned)),
     label_fine_pruned_na = sum(is.na(res$fine$pruned)),
+    seconds = round(as.numeric(difftime(Sys.time(), t_dataset, units = "secs")), 1),
     top_main = as.list(head(sort(as.integer(table(res$main$label)), decreasing = TRUE), 8))
   )
   cat(sprintf("  wrote %s/%s.csv\n", OUT, dataset))
@@ -115,6 +133,14 @@ meta$versions <- list(
 )
 meta$parameters <- list(de.method = "classic", fine.tune = TRUE,
                         normalisation = "CP10K then log1p", labels = "label.main primary, label.fine second arm")
+meta$working_directory <- WORK
+meta$timing <- list(
+  seconds_total = round(as.numeric(difftime(Sys.time(), t_start, units = "secs")), 1),
+  seconds_per_dataset = lapply(names(which_ref)[names(which_ref) %in% names(meta)], function(d) meta[[d]]$seconds)
+)
+names(meta$timing$seconds_per_dataset) <- names(which_ref)[names(which_ref) %in% names(meta)]
+meta$timing$note <- paste("wall clock for this working directory's datasets, both label levels,",
+                          "including loading the two celldex references once")
 writeLines(jsonlite::toJSON(meta, auto_unbox = TRUE, pretty = TRUE),
-           file.path(ROOT, "reports", "annotation-tools", "singler.summary.json"))
-cat("wrote singler.summary.json\n")
+           file.path(WORK, "singler.summary.json"))
+cat(sprintf("wrote singler.summary.json (%s s)\n", meta$timing$seconds_total))
